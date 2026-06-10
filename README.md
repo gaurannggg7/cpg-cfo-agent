@@ -22,26 +22,28 @@ The agents are wired together as a directed state graph, so each one writes to s
 ---
 
 ## Architecture
-┌─────────────────┐          ┌──────────────────────────────┐
-│  Next.js (TS)   │  POST    │        FastAPI Backend       │
-│  Upload + UI    │ ──────►  │                              │
-│  Vercel         │  /analyze│   LangGraph State Machine    │
-└─────────────────┘          │
-                        ┌──────────┐                  │
-│                    │  │categorize│                  │
-│                    │  └────┬─────┘                  │
-▼                    │       ▼                        │
-┌─────────────────┐         │  ┌──────────┐                  │
-│   Firestore     │         │  │ anomalies│                  │
-│ Analysis history│         │  └────┬─────┘                  │
-└─────────────────┘         │       ▼                        │
-│  ┌──────────┐   ┌───────────┐  │
-│  │  runway  │──►│ summarize │  │
-│  └──────────┘   └─────┬─────┘  │
-│                       │        │
-│              Groq Llama 3.3 70B│
-└──────────────────────┬─────────┘
-▼
+```mermaid
+flowchart TD
+    UI["Next.js + TypeScriptUpload + Dashboard(Vercel)"]
+    API["FastAPI Backend/analyze endpoint"]
+    DB[("Firebase FirestoreAnalysis history")]
+
+    subgraph GRAPH["LangGraph State Machine"]
+        A["categorize"] --> B["detect anomalies"]
+        B --> C["forecast runway"]
+        C --> D["summarize"]
+    end
+
+    LLM["Groq · Llama 3.3 70B"]
+
+    UI -->|"POST CSV"| API
+    API --> GRAPH
+    D --> LLM
+    LLM -->|"CFO Executive Brief"| API
+    API --> UI
+    UI --> DB
+```
+
 CFO Executive Brief
 ---
 
