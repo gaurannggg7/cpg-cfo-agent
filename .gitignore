@@ -1,0 +1,19 @@
+# Environment variables
+.env
+.env.local
+.env*.local
+backend/.env
+frontend/.env.local
+
+# Dependencies
+node_modules/
+__pycache__/
+.venv/
+*.pyc
+
+# Next.js
+.next/
+frontend/.next/
+
+# Misc
+.DS_Store
