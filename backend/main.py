@@ -11,7 +11,7 @@ app = FastAPI(title="CPG CFO Agent API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://cfo-agent.vercel.app"],
+    allow_origins=["http://localhost:3000", "https://cpg-cfo-agent.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
