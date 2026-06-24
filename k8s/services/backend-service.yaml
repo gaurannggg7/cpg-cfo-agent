@@ -1,0 +1,24 @@
+# backend-service.yaml — ClusterIP service for the FastAPI backend on port 8000.
+# Port 9090 is also exposed for Prometheus metric scraping.
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: cpg-cfo-agent
+  labels:
+    app: backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: cpg-cfo-agent
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+      protocol: TCP

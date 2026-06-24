@@ -5,3 +5,12 @@ pandas==2.2.0
 python-dotenv==1.2.2
 python-multipart==0.0.6
 langgraph==0.2.0
+
+# Kafka consumer (kafka_consumer.py)
+aiokafka==0.10.0
+
+# Prometheus metrics (monitoring.py)
+prometheus-client==0.20.0
+
+# Firestore evaluation logging (evaluation.py)
+firebase-admin==6.5.0

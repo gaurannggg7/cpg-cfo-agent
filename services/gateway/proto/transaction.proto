@@ -1,0 +1,30 @@
+// transaction.proto — Defines the FinancialAnalysisService gRPC contract.
+// The Go implementation lives in cmd/gateway/main.go.
+// Run `make proto-gen` to regenerate the Go stubs in gen/.
+
+syntax = "proto3";
+
+package transaction;
+
+option go_package = "github.com/gaurannggg7/cpg-cfo-agent/gateway/gen;gen";
+
+// TransactionRequest carries raw CSV financial data for async analysis.
+message TransactionRequest {
+  string session_id = 1;
+  bytes  csv_data   = 2;
+  string timestamp  = 3; // RFC-3339 UTC string
+  string user_id    = 4;
+}
+
+// TransactionResponse acknowledges receipt and returns a tracking job ID.
+message TransactionResponse {
+  string status  = 1; // "accepted" | "error"
+  string job_id  = 2;
+  string message = 3;
+}
+
+service FinancialAnalysisService {
+  // AnalyzeTransactions validates the CSV payload, publishes it to Kafka,
+  // and returns a job_id the caller can use to poll the analysis-complete topic.
+  rpc AnalyzeTransactions(TransactionRequest) returns (TransactionResponse);
+}

@@ -1,0 +1,67 @@
+# backend-deployment.yaml — FastAPI backend; 2 replicas.
+# The /health endpoint is used for readiness/liveness probes.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: cpg-cfo-agent
+  labels:
+    app: backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: cpg-cfo-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/gaurannggg7/cpg-cfo-agent/backend:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9090
+              protocol: TCP
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: GROQ_API_KEY
+              valueFrom:
+                # Store the actual key in a Secret named cpg-cfo-agent-secrets.
+                # kubectl create secret generic cpg-cfo-agent-secrets \
+                #   --from-literal=GROQ_API_KEY=<key> -n cpg-cfo-agent
+                secretKeyRef:
+                  name: cpg-cfo-agent-secrets
+                  key: GROQ_API_KEY
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3

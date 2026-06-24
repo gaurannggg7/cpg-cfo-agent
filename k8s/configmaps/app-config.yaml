@@ -1,0 +1,37 @@
+# app-config.yaml — Non-secret configuration shared across deployments.
+#
+# SECURITY NOTE: GROQ_API_KEY and Firebase credentials are listed here as
+# placeholder references for convenience. In production, move sensitive values
+# to a Kubernetes Secret and reference them with secretKeyRef:
+#
+#   kubectl create secret generic cpg-cfo-agent-secrets \
+#     --from-literal=GROQ_API_KEY=<your-key> \
+#     --from-literal=FIREBASE_API_KEY=<your-key> \
+#     -n cpg-cfo-agent
+#
+# The backend-deployment.yaml already uses secretKeyRef for GROQ_API_KEY.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: cpg-cfo-agent
+  labels:
+    app.kubernetes.io/part-of: cpg-cfo-agent
+data:
+  # Kafka
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+
+  # gRPC Gateway
+  GRPC_GATEWAY_PORT: "50051"
+
+  # FastAPI backend URL (used by frontend)
+  NEXT_PUBLIC_API_URL: "http://backend-service:8000"
+
+  # Logging
+  LOG_LEVEL: "info"
+
+  # Metrics port for the Prometheus HTTP server (monitoring.py)
+  METRICS_PORT: "9090"
+
+  # Firebase project (non-secret; actual keys go in the Secret)
+  FIREBASE_PROJECT_ID: "REPLACE_WITH_YOUR_PROJECT_ID"

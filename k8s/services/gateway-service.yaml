@@ -1,0 +1,19 @@
+# gateway-service.yaml — ClusterIP service for the Go gRPC gateway on port 50051.
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  namespace: cpg-cfo-agent
+  labels:
+    app: gateway
+    app.kubernetes.io/component: gateway
+    app.kubernetes.io/part-of: cpg-cfo-agent
+spec:
+  type: ClusterIP
+  selector:
+    app: gateway
+  ports:
+    - name: grpc
+      port: 50051
+      targetPort: 50051
+      protocol: TCP

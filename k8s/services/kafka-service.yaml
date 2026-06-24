@@ -1,0 +1,39 @@
+# kafka-service.yaml — ClusterIP services for Kafka (9092) and Zookeeper (2181).
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper-service
+  namespace: cpg-cfo-agent
+  labels:
+    app: zookeeper
+    app.kubernetes.io/component: zookeeper
+    app.kubernetes.io/part-of: cpg-cfo-agent
+spec:
+  type: ClusterIP
+  selector:
+    app: zookeeper
+  ports:
+    - name: client
+      port: 2181
+      targetPort: 2181
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+  namespace: cpg-cfo-agent
+  labels:
+    app: kafka
+    app.kubernetes.io/component: kafka
+    app.kubernetes.io/part-of: cpg-cfo-agent
+spec:
+  type: ClusterIP
+  selector:
+    app: kafka
+  ports:
+    - name: broker
+      port: 9092
+      targetPort: 9092
+      protocol: TCP

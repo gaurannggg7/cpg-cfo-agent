@@ -1,0 +1,8 @@
+# namespace.yaml — Isolates all CPG CFO Agent workloads in their own namespace.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cpg-cfo-agent
+  labels:
+    app.kubernetes.io/name: cpg-cfo-agent
+    app.kubernetes.io/managed-by: kubectl
