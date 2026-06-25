@@ -264,6 +264,20 @@ kubectl apply --dry-run=client -f k8s/hpa.yaml
 
 ---
 
+## Monitoring (Prometheus + Grafana)
+
+Access Grafana at http://localhost:3001 (admin/admin on first login)
+
+| Metric | Description |
+|--------|-------------|
+| Request Rate | Requests per second by endpoint |
+| Request Latency | P50/P95/P99 latency histograms |
+| Agent Execution | Per-agent LangGraph node timing |
+| LLM Token Usage | Groq token consumption by agent |
+| Pipeline Success | Rolling success rate (0.0–1.0) |
+
+---
+
 ## Monitoring & Evaluation
 
 ### Prometheus metrics

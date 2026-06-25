@@ -68,4 +68,5 @@ def record_pipeline_result(success: bool) -> None:
 
 def start_metrics_server(port: int = 9090) -> None:
     """Start the Prometheus HTTP server in a background daemon thread."""
-    start_http_server(port)
+    start_http_server(port, addr="0.0.0.0")
+    print(f"Prometheus metrics server started on :{port}")

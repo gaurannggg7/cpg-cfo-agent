@@ -4,10 +4,16 @@ import pandas as pd
 from io import StringIO
 from dotenv import load_dotenv
 from agent import cfo_app
+from monitoring import start_metrics_server
 
 load_dotenv()
 
 app = FastAPI(title="CPG CFO Agent API")
+
+
+@app.on_event("startup")
+async def startup_event():
+    start_metrics_server(9090)
 
 app.add_middleware(
     CORSMiddleware,
