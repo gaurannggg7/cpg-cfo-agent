@@ -4,17 +4,13 @@ import pandas as pd
 from io import StringIO
 from dotenv import load_dotenv
 from agent import cfo_app
-from monitoring import start_metrics_server
-
+from monitoring import start_metrics_server, REQUEST_COUNT, REQUEST_LATENCY, record_pipeline_result
+import time
 load_dotenv()
-
 app = FastAPI(title="CPG CFO Agent API")
-
-
 @app.on_event("startup")
 async def startup_event():
     start_metrics_server(9090)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "https://cpg-cfo-agent.vercel.app"],
@@ -22,18 +18,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...), monthly_revenue: float = Form(...)):
     content = await file.read()
     df = pd.read_csv(StringIO(content.decode()))
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date")
-
     months = len(df.groupby(df["date"].dt.to_period("M"))) or 1
     monthly_burn = float(df["amount"].sum() / months)
-
     initial_state = {
         "csv_text": df.to_csv(index=False),
         "df_summary": df.describe().to_string(),
@@ -44,9 +36,17 @@ async def analyze(file: UploadFile = File(...), monthly_revenue: float = Form(..
         "runway": {},
         "summary": "",
     }
-
-    result = cfo_app.invoke(initial_state)
-
+    _t0 = time.time()
+    try:
+        result = cfo_app.invoke(initial_state)
+        REQUEST_COUNT.labels(endpoint="/analyze", status="success").inc()
+        record_pipeline_result(True)
+    except Exception as e:
+        REQUEST_COUNT.labels(endpoint="/analyze", status="error").inc()
+        record_pipeline_result(False)
+        raise e
+    finally:
+        REQUEST_LATENCY.labels(endpoint="/analyze").observe(time.time() - _t0)
     return {
         "summary": result["summary"],
         "categories": result["categorized"],
@@ -59,8 +59,6 @@ async def analyze(file: UploadFile = File(...), monthly_revenue: float = Form(..
             "avg_transaction": float(df["amount"].mean()),
         },
     }
-
-
 @app.get("/health")
 async def health():
     return {"status": "ok"}
