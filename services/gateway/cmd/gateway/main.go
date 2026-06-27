@@ -19,7 +19,7 @@ import (
 	"time"
 
 	gateway "github.com/gaurannggg7/cpg-cfo-agent/gateway"
-	pb "github.com/gaurannggg7/cpg-cfo-agent/gateway/gen"
+	pb "github.com/gaurannggg7/cpg-cfo-agent/gateway/gen/proto"
 	"github.com/google/uuid"
 	kafka "github.com/segmentio/kafka-go"
 	"google.golang.org/grpc"
