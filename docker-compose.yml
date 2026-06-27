@@ -51,20 +51,18 @@ services:
       timeout: 10s
       retries: 5
 
+  
   kafka-init:
     image: confluentinc/cp-kafka:7.6.0
     depends_on:
-      kafka:
-        condition: service_healthy
-    entrypoint: ["/bin/sh", "-c"]
+      - kafka
     command: >
-      "kafka-topics --bootstrap-server kafka:9092
-        --create --if-not-exists
-        --topic transaction-ingestion --replication-factor 1 --partitions 1 &&
-       kafka-topics --bootstrap-server kafka:9092
-        --create --if-not-exists
-        --topic analysis-complete --replication-factor 1 --partitions 1 &&
-       echo 'Kafka topics ready'"
+      bash -c "
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transaction-ingestion --partitions 1 --replication-factor 1 &&
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic analysis-complete --partitions 1 --replication-factor 1 &&
+      echo 'topics created:' &&
+      kafka-topics --bootstrap-server kafka:9092 --list
+      "
     restart: "no"
 
   # ── gRPC gateway ─────────────────────────────────────────────────────────────
@@ -105,6 +103,8 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:8000
     depends_on:
       - backend
+    stdin_open: true
+    tty: true
 
   # ── Observability ────────────────────────────────────────────────────────────
 
@@ -123,7 +123,7 @@ services:
       - "3001:3000"
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
