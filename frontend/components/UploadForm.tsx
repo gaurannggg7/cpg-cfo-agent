@@ -10,10 +10,26 @@ interface Props {
 export default function UploadForm({ onAnalyze, loading }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [revenue, setRevenue] = useState(100000);
+  const [loadingSample, setLoadingSample] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (file) onAnalyze(file, revenue);
+  };
+
+  const handleUseSampleData = async () => {
+    setLoadingSample(true);
+    try {
+      const res = await fetch('/sample-data/sample-transactions.csv');
+      const blob = await res.blob();
+      const sampleFile = new File([blob], 'sample-transactions.csv', { type: 'text/csv' });
+      setFile(sampleFile);
+      setRevenue((prev) => (prev ? prev : 100000));
+    } catch (error) {
+      console.error('Failed to load sample data:', error);
+    } finally {
+      setLoadingSample(false);
+    }
   };
 
   return (
@@ -57,9 +73,21 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               aria-label="Upload transaction CSV"
-              required
             />
           </div>
+          <div className="mt-2.5 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={handleUseSampleData}
+              disabled={loadingSample}
+              className="text-sm font-medium text-slate-600 hover:text-slate-900 underline decoration-slate-300 underline-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              {loadingSample ? 'Loading sample…' : 'Use sample data'}
+            </button>
+          </div>
+          <p className="text-xs text-slate-400 mt-0.5">
+            3 months of sample transactions, includes a flagged anomaly.
+          </p>
         </div>
 
         {/* Revenue input */}

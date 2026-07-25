@@ -249,6 +249,12 @@ See [services/mcp/README.md](services/mcp/README.md) for Claude Desktop configur
 
 Access Grafana at http://localhost:3001 (admin/admin). The dashboard is provisioned automatically from `grafana/`.
 
+**Public live dashboard:** the local Prometheus also remote_writes to Grafana Cloud (see `prometheus/prometheus.yml.template` and the `prometheus-config`/`prometheus` services in `docker-compose.yml`). A public, no-login snapshot of the same dashboard is viewable here:
+
+[https://glowingpig1947.grafana.net/public-dashboards/67aa37ce287842f4bbc8230b921d72ff](https://glowingpig1947.grafana.net/public-dashboards/67aa37ce287842f4bbc8230b921d72ff)
+
+Panels only populate while the local Docker stack is running and sending `/analyze` traffic — it's a live feed, not a static demo.
+
 **Metrics** (defined in `backend/monitoring.py`):
 
 | Metric | Type | Labels | Description |
