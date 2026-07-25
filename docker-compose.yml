@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Full local stack: Zookeeper, Kafka, Go gRPC gateway, FastAPI backend, Next.js frontend.
 #
 # Quick start:
@@ -108,14 +106,31 @@ services:
 
   # ── Observability ────────────────────────────────────────────────────────────
 
+  # Renders prometheus.yml.template with GRAFANA_CLOUD_* vars from .env, then exits.
+  # (prom/prometheus's image has no shell utilities to do this itself.)
+  prometheus-config:
+    image: alpine:3.20
+    volumes:
+      - ./prometheus/prometheus.yml.template:/template/prometheus.yml.template:ro
+      - prometheus-config:/output
+    env_file:
+      - ./.env
+    entrypoint: sh -c "apk add --no-cache gettext >/dev/null && envsubst < /template/prometheus.yml.template > /output/prometheus.yml"
+    restart: "no"
+
   prometheus:
     image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus-generated/prometheus.yml
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-config:/etc/prometheus-generated
     ports:
       - "9090:9090"
     depends_on:
-      - backend
+      prometheus-config:
+        condition: service_completed_successfully
+      backend:
+        condition: service_started
 
   grafana:
     image: grafana/grafana:latest
@@ -129,3 +144,6 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
       - prometheus
+
+volumes:
+  prometheus-config:

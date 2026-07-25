@@ -1,0 +1,52 @@
+date,amount,description,category
+2026-01-02,-3017.44,Raw Materials - Packaging Corp,COGS
+2026-01-02,-3973.32,Payroll Taxes,Payroll
+2026-01-02,-529.23,Cleaning Services,Operations
+2026-01-02,-323.75,Electricity - Warehouse,Utilities
+2026-01-03,-927.26,Email Campaign - Klaviyo,Marketing
+2026-01-04,-2373.53,Co-Packer Fees - CPG Manufacturing,COGS
+2026-01-04,-274.1,Slack Workspace,Software
+2026-01-08,-1126.57,Social Media Ads - Meta,Marketing
+2026-01-08,-4678.41,Payroll Taxes,Payroll
+2026-01-10,-172.13,Equipment Maintenance,Operations
+2026-01-11,-1866.02,Ingredient Supplier - FlavorTech,COGS
+2026-01-13,-1176.26,Freight - XPO Logistics,Logistics
+2026-01-18,-469.07,Consulting - Retail Strategy,Professional Services
+2026-01-19,-1760.68,Warehouse Rent - Monthly,Rent
+2026-01-22,-91.22,QuickBooks Subscription,Software
+2026-01-30,-622.05,Retail Endcap Placement,Marketing
+2026-01-31,-777.1,Freight - XPO Logistics,Logistics
+2026-02-03,-4516.71,Biweekly Payroll Run,Payroll
+2026-02-03,-1204.28,Legal Retainer - Trademark Filing,Professional Services
+2026-02-06,-351.98,Last-Mile Delivery - Regional Carrier,Logistics
+2026-02-08,-2687.28,Ingredient Supplier - FlavorTech,COGS
+2026-02-08,-1161.64,Social Media Ads - Meta,Marketing
+2026-02-09,-1987.93,HQ Office Rent,Rent
+2026-02-10,-249.61,Internet & Phone,Utilities
+2026-02-12,-281.96,AWS Hosting,Software
+2026-02-14,-5000.0,Emergency Influencer Campaign - Valentine's Push,Marketing
+2026-02-15,-1776.27,Raw Materials - Bulk Sugar Co,COGS
+2026-02-15,-385.99,Shopify Subscription,Software
+2026-02-16,-239.21,Fuel Surcharge,Logistics
+2026-02-17,-1612.71,Email Campaign - Klaviyo,Marketing
+2026-02-18,-2898.52,Raw Materials - Bulk Sugar Co,COGS
+2026-02-19,-270.06,Equipment Maintenance,Operations
+2026-02-22,-482.29,Office Supplies - Staples,Operations
+2026-02-24,-731.91,Email Campaign - Klaviyo,Marketing
+2026-03-01,-217.58,QuickBooks Subscription,Software
+2026-03-04,-959.18,Raw Materials - Bulk Sugar Co,COGS
+2026-03-05,-188.11,Office Supplies - Staples,Operations
+2026-03-08,-886.42,Email Campaign - Klaviyo,Marketing
+2026-03-08,-216.67,Cleaning Services,Operations
+2026-03-12,-1157.73,Fuel Surcharge,Logistics
+2026-03-12,-2167.17,HQ Office Rent,Rent
+2026-03-13,-860.92,Co-Packer Fees - CPG Manufacturing,COGS
+2026-03-15,-1253.73,Co-Packer Fees - CPG Manufacturing,COGS
+2026-03-15,-4569.22,Contractor Payment - Design,Payroll
+2026-03-16,-155.1,QuickBooks Subscription,Software
+2026-03-21,-309.83,Electricity - Warehouse,Utilities
+2026-03-23,-1445.25,Consulting - Retail Strategy,Professional Services
+2026-03-25,-494.01,Trade Show Booth - Expo West,Marketing
+2026-03-28,-420.87,Email Campaign - Klaviyo,Marketing
+2026-03-28,-906.4,Last-Mile Delivery - Regional Carrier,Logistics
+2026-03-29,-4946.99,Biweekly Payroll Run,Payroll
