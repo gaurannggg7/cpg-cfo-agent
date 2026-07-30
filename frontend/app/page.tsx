@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { onAuthChange } from '@/lib/firebase';
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
+import Navbar from '@/components/Navbar';
+import AuthBanner from '@/components/AuthBanner';
 import UploadForm from '@/components/UploadForm';
 import Dashboard, { type AnalysisResult } from '@/components/Dashboard';
 import Hero from '@/components/landing/Hero';
@@ -10,20 +12,24 @@ import Stats from '@/components/landing/Stats';
 import HowItWorks from '@/components/landing/HowItWorks';
 import BuiltWith from '@/components/landing/BuiltWith';
 import Footer from '@/components/landing/Footer';
-import type { User } from 'firebase/auth';
 
 export default function Home() {
   const [results, setResults] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const { save } = useAnalysisSave();
+  const prevUidRef = useRef<string | null>(null);
 
   useEffect(() => {
-    // No auto sign-in: auth starts signed-out until the user explicitly
-    // chooses guest mode or Google sign-in. Just mirror auth state.
-    const unsubscribe = onAuthChange(setUser);
-    return unsubscribe;
-  }, []);
+    const uid = user?.uid ?? null;
+    // Discard any displayed analysis when the signed-in identity changes
+    // (e.g. guest upgrades to Google, or signs out) — fresh start, no
+    // merging a guest's unsaved results into the new account.
+    if (prevUidRef.current !== null && uid !== prevUidRef.current) {
+      setResults(null);
+    }
+    prevUidRef.current = uid;
+  }, [user?.uid]);
 
   const handleAnalyze = async (file: File, monthlyRevenue: number) => {
     setLoading(true);
@@ -58,35 +64,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      {/* Sticky nav */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-zinc-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-zinc-900 rounded-md flex items-center justify-center flex-shrink-0">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-              </svg>
-            </div>
-            <span className="text-zinc-900 font-semibold text-sm tracking-tight">CPG CFO Agent</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4">
-            <a
-              href="#demo"
-              className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-200 font-medium"
-            >
-              Demo
-            </a>
-            <a
-              href="https://github.com/gaurannggg7/cpg-cfo-agent"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-1.5 rounded-lg font-medium transition-colors duration-200"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </header>
+      <Navbar user={user} />
+      {!user && <AuthBanner />}
 
       {/* Marketing sections */}
       <Hero />
