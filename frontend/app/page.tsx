@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signInAnon } from '@/lib/firebase';
+import { onAuthChange } from '@/lib/firebase';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
 import UploadForm from '@/components/UploadForm';
 import Dashboard, { type AnalysisResult } from '@/components/Dashboard';
@@ -19,7 +19,10 @@ export default function Home() {
   const { save } = useAnalysisSave();
 
   useEffect(() => {
-    signInAnon().then((cred) => setUser(cred.user)).catch(console.error);
+    // No auto sign-in: auth starts signed-out until the user explicitly
+    // chooses guest mode or Google sign-in. Just mirror auth state.
+    const unsubscribe = onAuthChange(setUser);
+    return unsubscribe;
   }, []);
 
   const handleAnalyze = async (file: File, monthlyRevenue: number) => {

@@ -9,7 +9,15 @@ import {
   orderBy,
   getDocs,
 } from 'firebase/firestore';
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import {
+  getAuth,
+  signInAnonymously,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  type User,
+} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -26,6 +34,21 @@ export const auth = getAuth(app);
 
 export async function signInAnon() {
   return await signInAnonymously(auth);
+}
+
+const googleProvider = new GoogleAuthProvider();
+
+export async function signInWithGoogle() {
+  return await signInWithPopup(auth, googleProvider);
+}
+
+export async function signOutUser() {
+  return await signOut(auth);
+}
+
+/** Subscribe to auth state changes. Returns the unsubscribe function. */
+export function onAuthChange(callback: (user: User | null) => void) {
+  return onAuthStateChanged(auth, callback);
 }
 
 export async function saveAnalysis(data: Record<string, unknown>, userId: string) {
