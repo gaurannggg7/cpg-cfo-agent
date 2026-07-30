@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
+import { runAnalysis } from '@/lib/analyzeApi';
 import Navbar from '@/components/Navbar';
 import AuthBanner from '@/components/AuthBanner';
 import UploadForm from '@/components/UploadForm';
@@ -34,21 +35,8 @@ export default function Home() {
 
   const handleAnalyze = async (file: File, monthlyRevenue: number) => {
     setLoading(true);
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('monthly_revenue', monthlyRevenue.toString());
-
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
-      const res = await fetch(`${apiUrl}/analyze`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error(`API error ${res.status}`);
-
-      const data = await res.json();
+      const data = await runAnalysis(file, monthlyRevenue);
 
       // Guests (anonymous) never persist results — Firestore rules reject
       // anonymous writes, so skipping the call keeps the demo working for them.
@@ -56,7 +44,7 @@ export default function Home() {
         await save(data, user.uid, file.name);
       }
 
-      setResults(data as AnalysisResult);
+      setResults(data);
     } catch (error) {
       console.error('Analysis failed:', error);
       alert('Analysis failed. Is the backend running? Check console for details.');

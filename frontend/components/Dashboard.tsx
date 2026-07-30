@@ -21,6 +21,8 @@ export interface AnalysisResult {
   metrics: Metrics;
   runway: RunwayData;
   anomalies: AnomalyData;
+  // Present in the API response but not rendered by this component.
+  categories?: unknown;
 }
 
 interface Props {

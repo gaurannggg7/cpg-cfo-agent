@@ -56,7 +56,7 @@ export function onAuthChange(callback: (user: User | null) => void) {
 }
 
 export async function saveAnalysis(
-  data: Record<string, unknown>,
+  data: AnalysisResult,
   userId: string,
   fileName?: string
 ) {
