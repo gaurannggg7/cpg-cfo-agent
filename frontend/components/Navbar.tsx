@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { User } from 'firebase/auth';
 import { signInWithGoogle, signOutUser } from '@/lib/firebase';
 
@@ -40,12 +41,20 @@ export default function Navbar({ user }: Props) {
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          <a
-            href="#demo"
+          <Link
+            href="/#demo"
             className="hidden sm:inline text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-200 font-medium"
           >
             Demo
-          </a>
+          </Link>
+          {isGoogleUser && (
+            <Link
+              href="/dashboard"
+              className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-200 font-medium"
+            >
+              Dashboard
+            </Link>
+          )}
           <a
             href="https://github.com/gaurannggg7/cpg-cfo-agent"
             target="_blank"

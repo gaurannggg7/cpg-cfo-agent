@@ -8,7 +8,11 @@ import {
   where,
   orderBy,
   getDocs,
+  doc,
+  getDoc,
+  type Timestamp,
 } from 'firebase/firestore';
+import type { AnalysisResult } from '@/components/Dashboard';
 import {
   getAuth,
   signInAnonymously,
@@ -51,8 +55,13 @@ export function onAuthChange(callback: (user: User | null) => void) {
   return onAuthStateChanged(auth, callback);
 }
 
-export async function saveAnalysis(data: Record<string, unknown>, userId: string) {
+export async function saveAnalysis(
+  data: Record<string, unknown>,
+  userId: string,
+  fileName?: string
+) {
   const docRef = await addDoc(collection(db, 'analyses'), {
+    fileName: fileName ?? 'untitled.csv',
     summary: data.summary,
     categories: data.categories,
     anomalies: data.anomalies,
@@ -64,12 +73,26 @@ export async function saveAnalysis(data: Record<string, unknown>, userId: string
   return docRef.id;
 }
 
-export async function getUserAnalyses(userId: string) {
+/** An analysis document as stored in Firestore. */
+export interface StoredAnalysis extends AnalysisResult {
+  id: string;
+  userId: string;
+  fileName: string;
+  createdAt: Timestamp | null;
+}
+
+export async function getUserAnalyses(userId: string): Promise<StoredAnalysis[]> {
   const q = query(
     collection(db, 'analyses'),
     where('userId', '==', userId),
     orderBy('createdAt', 'desc')
   );
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as StoredAnalysis);
+}
+
+export async function getAnalysisById(id: string): Promise<StoredAnalysis | null> {
+  const snapshot = await getDoc(doc(db, 'analyses', id));
+  if (!snapshot.exists()) return null;
+  return { id: snapshot.id, ...snapshot.data() } as StoredAnalysis;
 }

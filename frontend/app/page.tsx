@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
 import Navbar from '@/components/Navbar';
@@ -16,7 +17,7 @@ import Footer from '@/components/landing/Footer';
 export default function Home() {
   const [results, setResults] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { save } = useAnalysisSave();
   const prevUidRef = useRef<string | null>(null);
 
@@ -49,8 +50,10 @@ export default function Home() {
 
       const data = await res.json();
 
-      if (user?.uid) {
-        await save(data, user.uid);
+      // Guests (anonymous) never persist results — Firestore rules reject
+      // anonymous writes, so skipping the call keeps the demo working for them.
+      if (user?.uid && !user.isAnonymous) {
+        await save(data, user.uid, file.name);
       }
 
       setResults(data as AnalysisResult);
@@ -88,6 +91,16 @@ export default function Home() {
                 date, amount, description, category
               </code>
             </p>
+
+            {/* Signed-in users get their saved history; guests just run the demo. */}
+            {!authLoading && user && !user.isAnonymous && (
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center justify-center text-sm bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 mt-6"
+              >
+                Go to Dashboard
+              </Link>
+            )}
           </div>
           {!results ? (
             <UploadForm onAnalyze={handleAnalyze} loading={loading} />

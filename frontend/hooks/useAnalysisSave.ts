@@ -4,10 +4,14 @@ import { saveAnalysis } from '@/lib/firebase';
 export function useAnalysisSave() {
   const [saving, setSaving] = useState(false);
 
-  const save = async (data: Record<string, unknown>, userId: string) => {
+  const save = async (
+    data: Record<string, unknown>,
+    userId: string,
+    fileName?: string
+  ) => {
     setSaving(true);
     try {
-      return await saveAnalysis(data, userId);
+      return await saveAnalysis(data, userId, fileName);
     } finally {
       setSaving(false);
     }
