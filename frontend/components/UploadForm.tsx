@@ -7,6 +7,8 @@ interface Props {
   loading: boolean;
 }
 
+const MAX_MONTHLY_REVENUE = 100_000_000;
+
 export default function UploadForm({ onAnalyze, loading }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [revenue, setRevenue] = useState(100000);
@@ -15,6 +17,14 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (file) onAnalyze(file, revenue);
+  };
+
+  const handleRevenueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Digits only — also strips any leading zeros as they're typed
+    // (e.g. "034847740" -> 34847740), then caps at a sane maximum.
+    const digitsOnly = e.target.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+    const parsed = digitsOnly === '' ? 0 : Number(digitsOnly);
+    setRevenue(Math.min(parsed, MAX_MONTHLY_REVENUE));
   };
 
   const handleUseSampleData = async () => {
@@ -75,17 +85,21 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
               aria-label="Upload transaction CSV"
             />
           </div>
-          <div className="mt-2.5 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={handleUseSampleData}
-              disabled={loadingSample}
-              className="text-sm font-medium text-[#9CA3AF] hover:text-[#E2E8F0] underline decoration-white/20 underline-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-            >
-              {loadingSample ? 'Loading sample…' : 'Use sample data'}
-            </button>
+          <div className="flex items-center gap-3 my-4">
+            <div className="flex-1 h-px bg-white/[0.08]" />
+            <span className="text-xs text-[#9CA3AF] uppercase tracking-wider">or</span>
+            <div className="flex-1 h-px bg-white/[0.08]" />
           </div>
-          <p className="text-xs text-[#9CA3AF]/70 mt-0.5">
+
+          <button
+            type="button"
+            onClick={handleUseSampleData}
+            disabled={loadingSample}
+            className="w-full py-3 px-4 rounded-xl border border-[#7C3AED]/50 bg-[#7C3AED]/10 hover:bg-[#7C3AED]/15 hover:border-[#7C3AED] text-[#E2E8F0] text-sm font-semibold transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {loadingSample ? 'Loading sample…' : 'Try Sample Data'}
+          </button>
+          <p className="text-xs text-[#9CA3AF]/70 text-center mt-2">
             3 months of sample transactions, includes a flagged anomaly.
           </p>
         </div>
@@ -99,10 +113,10 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF] text-sm font-medium select-none" aria-hidden="true">$</span>
             <input
               id="monthly-revenue"
-              type="number"
-              value={revenue}
-              min={0}
-              onChange={(e) => setRevenue(Number(e.target.value))}
+              type="text"
+              inputMode="numeric"
+              value={revenue.toLocaleString('en-US')}
+              onChange={handleRevenueChange}
               className="w-full pl-8 pr-4 py-3 bg-white/[0.03] border border-white/[0.12] rounded-xl text-[#E2E8F0] text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent transition-shadow duration-200"
             />
           </div>
