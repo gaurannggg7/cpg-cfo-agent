@@ -4,7 +4,7 @@ const STACK = [
   { name: 'FastAPI', role: 'Backend' },
   { name: 'LangGraph', role: 'Orchestration' },
   { name: 'Groq', role: 'Inference' },
-  { name: 'Firebase', role: 'Storage' },
+  { name: 'Firebase', role: 'Auth & Storage' },
   { name: 'Docker', role: 'Deployment' },
 ] as const;
 
