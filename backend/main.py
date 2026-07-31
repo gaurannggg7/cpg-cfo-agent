@@ -1,9 +1,10 @@
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from io import StringIO
 from dotenv import load_dotenv
 from agent import cfo_app
+from auth import require_firebase_user
 from monitoring import start_metrics_server, REQUEST_COUNT, REQUEST_LATENCY, record_pipeline_result
 import time
 load_dotenv()
@@ -19,7 +20,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 @app.post("/analyze")
-async def analyze(file: UploadFile = File(...), monthly_revenue: float = Form(...)):
+async def analyze(
+    file: UploadFile = File(...),
+    monthly_revenue: float = Form(...),
+    user: dict = Depends(require_firebase_user),
+):
     content = await file.read()
     df = pd.read_csv(StringIO(content.decode()))
     df["date"] = pd.to_datetime(df["date"])

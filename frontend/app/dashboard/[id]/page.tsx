@@ -47,7 +47,7 @@ export default function AnalysisDetailPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    if (!isSignedIn) router.replace('/');
+    if (!isSignedIn) router.replace('/login');
   }, [authLoading, isSignedIn, router]);
 
   useEffect(() => {
@@ -93,41 +93,41 @@ export default function AnalysisDetailPage() {
 
   if (authLoading || !isSignedIn) {
     return (
-      <div className="min-h-screen bg-zinc-50">
+      <div className="min-h-screen">
         <Navbar user={user} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen">
       <Navbar user={user} />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors duration-200 mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-[#E2E8F0] transition-colors duration-200 mb-6"
         >
           ← Back to Dashboard
         </Link>
 
         {state === 'loading' && (
           <div className="space-y-4">
-            <div className="h-8 w-1/3 bg-zinc-200 rounded animate-pulse" />
-            <div className="h-40 bg-white border border-zinc-200 rounded-xl animate-pulse" />
-            <div className="h-24 bg-white border border-zinc-200 rounded-xl animate-pulse" />
+            <div className="h-8 w-1/3 bg-white/[0.08] rounded animate-pulse" />
+            <div className="h-40 bg-[#0F0F12] border border-white/[0.08] rounded-xl animate-pulse" />
+            <div className="h-24 bg-[#0F0F12] border border-white/[0.08] rounded-xl animate-pulse" />
           </div>
         )}
 
         {state === 'denied' && (
-          <div className="bg-white rounded-xl border border-zinc-200 shadow-sm px-6 py-16 text-center">
-            <p className="text-zinc-900 font-semibold mb-1">Analysis not available</p>
-            <p className="text-sm text-zinc-500 mb-6">
+          <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] px-6 py-16 text-center">
+            <p className="text-[#E2E8F0] font-semibold mb-1">Analysis not available</p>
+            <p className="text-sm text-[#9CA3AF] mb-6">
               It doesn&apos;t exist, or it belongs to another account.
             </p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center justify-center text-sm bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200"
+              className="inline-flex items-center justify-center text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200"
             >
               Back to Dashboard
             </Link>
@@ -138,17 +138,17 @@ export default function AnalysisDetailPage() {
           <>
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
               <div className="min-w-0">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2">
                   {formatAnalysisDate(analysis.createdAt)}
                 </p>
-                <h1 className="text-3xl font-bold text-zinc-900 tracking-tight break-all">
+                <h1 className="font-[family-name:var(--font-heading)] text-3xl font-bold text-[#E2E8F0] tracking-tight break-all">
                   {analysis.fileName}
                 </h1>
               </div>
               <button
                 type="button"
                 onClick={handleDownloadCsv}
-                className="inline-flex items-center justify-center text-sm border border-zinc-300 hover:border-zinc-400 bg-white text-zinc-900 px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 flex-shrink-0"
+                className="inline-flex items-center justify-center text-sm border border-[#7C3AED] hover:bg-[#7C3AED]/10 text-[#E2E8F0] px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 flex-shrink-0"
               >
                 Download CSV
               </button>

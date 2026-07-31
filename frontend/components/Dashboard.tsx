@@ -39,14 +39,14 @@ interface MetricCardProps {
 function MetricCard({ label, value, accent }: MetricCardProps) {
   return (
     <div
-      className={`bg-white rounded-xl border shadow-sm p-6 transition-shadow duration-200 hover:shadow-md ${
-        accent ? 'border-amber-200' : 'border-slate-200'
+      className={`bg-[#0F0F12] rounded-xl border p-6 transition-colors duration-200 hover:border-white/20 ${
+        accent ? 'border-[#7C3AED]/40' : 'border-white/[0.08]'
       }`}
     >
-      <p className="text-[11px] font-bold tracking-widest uppercase text-slate-400 mb-3">{label}</p>
+      <p className="text-[11px] font-bold tracking-widest uppercase text-[#9CA3AF] mb-3">{label}</p>
       <p
         className={`text-3xl font-bold tabular-nums leading-none ${
-          accent ? 'text-amber-600' : 'text-slate-900'
+          accent ? 'text-[#06B6D4]' : 'text-[#E2E8F0]'
         }`}
       >
         {value}
@@ -61,25 +61,25 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
   const riskLevel = anomalies?.risk_level?.toLowerCase();
   const riskBadgeClass =
     riskLevel === 'high'
-      ? 'bg-red-50 text-red-700 border-red-200'
+      ? 'bg-red-500/10 text-red-400 border-red-500/30'
       : riskLevel === 'medium'
-      ? 'bg-amber-50 text-amber-700 border-amber-200'
-      : 'bg-slate-100 text-slate-600 border-slate-200';
+      ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+      : 'bg-emerald-500/10 text-emerald-400/80 border-emerald-500/20';
 
   return (
     <div className="space-y-6">
 
       {/* CFO Executive Brief */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="border-b border-slate-100 px-6 sm:px-8 py-5 flex items-center gap-3">
-          <div className="w-1 h-7 rounded-full bg-amber-500 flex-shrink-0" aria-hidden="true" />
+      <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="border-b border-white/[0.08] px-6 sm:px-8 py-5 flex items-center gap-3">
+          <div className="w-1 h-7 rounded-full bg-[#7C3AED] flex-shrink-0" aria-hidden="true" />
           <div>
-            <p className="text-[11px] font-bold tracking-widest uppercase text-slate-400">AI-Generated</p>
-            <h2 className="text-lg font-bold text-slate-900 leading-tight">CFO Executive Brief</h2>
+            <p className="text-[11px] font-bold tracking-widest uppercase text-[#9CA3AF]">AI-Generated</p>
+            <h2 className="font-[family-name:var(--font-heading)] text-lg font-bold text-[#E2E8F0] leading-tight">CFO Executive Brief</h2>
           </div>
         </div>
         <div className="px-6 sm:px-8 py-7">
-          <p className="text-slate-600 text-base leading-[1.75] whitespace-pre-wrap break-words">{summary}</p>
+          <p className="text-[#E2E8F0]/90 text-base leading-[1.75] whitespace-pre-wrap break-words">{summary}</p>
         </div>
       </div>
 
@@ -103,11 +103,11 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
 
       {/* Anomalies */}
       {anomalies?.anomalies && anomalies.anomalies.length > 0 && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="border-b border-slate-100 px-6 py-4 flex items-center justify-between gap-4">
+        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+          <div className="border-b border-white/[0.08] px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 rounded-full bg-red-500 flex-shrink-0" aria-hidden="true" />
-              <h3 className="text-base font-bold text-slate-900">Anomalies Detected</h3>
+              <h3 className="text-base font-bold text-[#E2E8F0]">Anomalies Detected</h3>
             </div>
             {anomalies.risk_level && (
               <span
@@ -119,7 +119,7 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
           </div>
           <ul className="px-6 py-5 space-y-3" role="list">
             {anomalies.anomalies.map((item, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+              <li key={i} className="flex items-start gap-3 text-sm text-[#E2E8F0]/80">
                 <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" aria-hidden="true" />
                 {item}
               </li>
@@ -130,16 +130,16 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
 
       {/* Recommendations */}
       {runway?.recommendations && runway.recommendations.length > 0 && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-3">
+        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+          <div className="border-b border-white/[0.08] px-6 py-4 flex items-center gap-3">
             <div className="w-1 h-6 rounded-full bg-emerald-500 flex-shrink-0" aria-hidden="true" />
-            <h3 className="text-base font-bold text-slate-900">Recommendations</h3>
+            <h3 className="text-base font-bold text-[#E2E8F0]">Recommendations</h3>
           </div>
           <ol className="px-6 py-5 space-y-3" role="list">
             {runway.recommendations.map((rec, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+              <li key={i} className="flex items-start gap-3 text-sm text-[#E2E8F0]/80">
                 <span
-                  className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold flex items-center justify-center leading-none mt-0.5"
+                  className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold flex items-center justify-center leading-none mt-0.5"
                   aria-hidden="true"
                 >
                   {i + 1}
@@ -154,7 +154,7 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
       {/* New Analysis */}
       <button
         onClick={onNewAnalysis}
-        className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-200 text-sm tracking-wide cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900"
+        className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-200 text-sm tracking-wide cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] focus-visible:ring-[#7C3AED]"
       >
         Analyze New File
       </button>

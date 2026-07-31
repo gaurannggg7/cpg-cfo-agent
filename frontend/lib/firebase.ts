@@ -20,6 +20,8 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   type User,
 } from 'firebase/auth';
 
@@ -48,6 +50,32 @@ export async function signInWithGoogle() {
 
 export async function signOutUser() {
   return await signOut(auth);
+}
+
+export async function signUpWithEmail(email: string, password: string) {
+  return await createUserWithEmailAndPassword(auth, email, password);
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  return await signInWithEmailAndPassword(auth, email, password);
+}
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  'auth/email-already-in-use': 'An account with this email already exists. Try signing in instead.',
+  'auth/invalid-email': 'That email address doesn’t look right.',
+  'auth/invalid-credential': 'Incorrect email or password.',
+  'auth/wrong-password': 'Incorrect email or password.',
+  'auth/user-not-found': 'Incorrect email or password.',
+  'auth/weak-password': 'Password must be at least 6 characters.',
+  'auth/too-many-requests': 'Too many attempts. Wait a moment and try again.',
+  'auth/popup-closed-by-user': 'Sign-in was cancelled.',
+  'auth/operation-not-allowed': 'Email/password sign-in isn’t enabled yet. Try Google instead.',
+};
+
+/** Maps a Firebase Auth error to a plain-English message; falls back to a generic one. */
+export function getAuthErrorMessage(error: unknown): string {
+  const code = (error as { code?: string })?.code;
+  return (code && AUTH_ERROR_MESSAGES[code]) || 'Something went wrong. Please try again.';
 }
 
 /** Subscribe to auth state changes. Returns the unsubscribe function. */
