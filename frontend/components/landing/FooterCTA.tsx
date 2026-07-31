@@ -1,9 +1,9 @@
 // TODO: replace with your real GitHub profile/repo URL.
-const GITHUB_URL = 'https://github.com/TODO';
+const GITHUB_URL = 'https://github.com/gaurannggg7/cpg-cfo-agent';
 // TODO: replace with your real LinkedIn profile URL.
-const LINKEDIN_URL = 'https://linkedin.com/in/TODO';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/gaurang-mohan/';
 // TODO: replace with your real contact email.
-const CONTACT_EMAIL = 'TODO@example.com';
+const CONTACT_EMAIL = 'gaurangmohan25@gmail.com';
 
 export default function FooterCTA() {
   return (
