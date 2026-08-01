@@ -39,7 +39,7 @@ interface MetricCardProps {
 function MetricCard({ label, value, accent }: MetricCardProps) {
   return (
     <div
-      className={`bg-[#0F0F12] rounded-xl border p-6 transition-colors duration-200 hover:border-white/20 ${
+      className={`bg-[#0F0F12]/75 rounded-xl border p-6 transition-colors duration-200 hover:border-white/20 ${
         accent ? 'border-[#7C3AED]/40' : 'border-white/[0.08]'
       }`}
     >
@@ -69,8 +69,7 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
   return (
     <div className="space-y-6">
 
-      {/* CFO Executive Brief */}
-      <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+      <div className="bg-[#0F0F12]/75 rounded-xl border border-white/[0.08] overflow-hidden">
         <div className="border-b border-white/[0.08] px-6 sm:px-8 py-5 flex items-center gap-3">
           <div className="w-1 h-7 rounded-full bg-[#7C3AED] flex-shrink-0" aria-hidden="true" />
           <div>
@@ -83,7 +82,6 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
         </div>
       </div>
 
-      {/* KPI Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard label="Transactions" value={metrics.total_transactions} />
         <MetricCard
@@ -101,9 +99,8 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
         />
       </div>
 
-      {/* Anomalies */}
       {anomalies?.anomalies && anomalies.anomalies.length > 0 && (
-        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="bg-[#0F0F12]/75 rounded-xl border border-white/[0.08] overflow-hidden">
           <div className="border-b border-white/[0.08] px-6 py-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-1 h-6 rounded-full bg-red-500 flex-shrink-0" aria-hidden="true" />
@@ -128,9 +125,8 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
         </div>
       )}
 
-      {/* Recommendations */}
       {runway?.recommendations && runway.recommendations.length > 0 && (
-        <div className="bg-[#0F0F12] rounded-xl border border-white/[0.08] overflow-hidden">
+        <div className="bg-[#0F0F12]/75 rounded-xl border border-white/[0.08] overflow-hidden">
           <div className="border-b border-white/[0.08] px-6 py-4 flex items-center gap-3">
             <div className="w-1 h-6 rounded-full bg-emerald-500 flex-shrink-0" aria-hidden="true" />
             <h3 className="text-base font-bold text-[#E2E8F0]">Recommendations</h3>
@@ -151,7 +147,6 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
         </div>
       )}
 
-      {/* New Analysis */}
       <button
         onClick={onNewAnalysis}
         className="w-full bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-semibold py-3.5 px-6 rounded-xl transition-colors duration-200 text-sm tracking-wide cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] focus-visible:ring-[#7C3AED]"

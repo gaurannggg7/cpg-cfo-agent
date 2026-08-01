@@ -20,7 +20,7 @@ export default function AnalyzePage() {
 
   const isSignedIn = !!user && !user.isAnonymous;
 
-  // Protected route: guests and signed-out visitors go back to the landing page.
+  // Protected route: guests and signed-out visitors get sent to /login.
   useEffect(() => {
     if (authLoading) return;
     if (!isSignedIn) router.replace('/login');

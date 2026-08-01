@@ -1,8 +1,10 @@
-# CPG CFO Agent
+# Baseline
 
-**Turn a CSV of transactions into an executive financial brief in under 3 seconds.**
+**Know what's normal. Catch what's not.**
 
-An agentic AI system that runs four autonomous LLM-powered agents in sequence — categorizing spend, flagging anomalies, forecasting runway, and writing a CFO-ready summary — orchestrated with LangGraph and served over a production Next.js interface.
+Baseline turns a CSV of transactions into an executive financial brief in under 3 seconds. Four autonomous LLM agents run in sequence — categorizing spend, flagging anomalies, forecasting runway, and writing a CFO-ready summary — orchestrated with LangGraph and served behind a Next.js frontend with real accounts, guest access, and per-user data isolation.
+
+The repository and package names still say `cpg-cfo-agent` — that's the original working title and it's wired into the GitHub URL, so it stays. Everything user-facing is Baseline.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-zinc.svg)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://cpg-cfo-agent.vercel.app)
@@ -11,80 +13,132 @@ An agentic AI system that runs four autonomous LLM-powered agents in sequence �
 
 ---
 
-## What it does
+## Demo
 
-Upload a CSV of financial transactions and the system runs a four-agent pipeline that produces a structured CFO executive brief — including categorized spend by bucket (COGS, OpEx, S&M, R&D), flagged anomalies with risk level, cash runway in months, and a plain-English executive summary written by Llama 3.3 70B.
+**[cpg-cfo-agent.vercel.app](https://cpg-cfo-agent.vercel.app)**
 
-Each agent writes to shared state that the next agent reads from. Results are persisted to Firebase Firestore and rendered in a real-time dashboard — no page reload required.
+Click **Try Demo**, then **Try Sample Data** — no account needed. The sample CSV includes a deliberately planted anomaly (a -$5,000 outlier transaction) so you can see the anomaly detection actually catch something, not just render an empty state.
 
----
-
-## Architecture
-
-Two independent ingestion paths feed the same LangGraph pipeline:
-
-```
-┌─────────────────────────────── HTTP PATH ────────────────────────────────────┐
-│                                                                               │
-│  Browser / curl                                                               │
-│       │ POST /analyze (multipart CSV)                                         │
-│       ▼                                                                       │
-│  Next.js Frontend ──► FastAPI Backend :8000 ──► LangGraph Pipeline           │
-│  (Vercel / :3000)       /analyze                 categorize →                 │
-│                         /health                  detect_anomalies →           │
-│                                                  runway_calc →                │
-│                                                  summarize                    │
-│                                                       │                       │
-│                                                       ▼                       │
-│                                                  Groq · Llama 3.3 70B        │
-└───────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────── gRPC / KAFKA PATH ────────────────────────────┐
-│                                                                               │
-│  gRPC Client                                                                  │
-│       │ AnalyzeTransactions RPC                                               │
-│       ▼                                                                       │
-│  Go Gateway :50051 ──► Kafka "transaction-ingestion" ──► kafka_consumer.py  │
-│  services/gateway/        (validate + publish JSON)         cfo_app.invoke() │
-│                                                                  │            │
-│                                                                  ├─► evaluation.py
-│                                                                  │   Firestore
-│                                                                  │   evaluations/
-│                                                                  │            │
-│                                                        Kafka "analysis-complete"
-│                                                                               │
-│  Prometheus metrics: http://localhost:9090  (Prometheus server)               │
-└───────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────── MCP PATH ─────────────────────────────────────┐
-│                                                                               │
-│  Claude Desktop                                                               │
-│       │ stdio                                                                 │
-│       ▼                                                                       │
-│  FastMCP server (services/mcp/server.py) ──► LangGraph Pipeline              │
-│  3 tools: analyze_transactions                                                │
-│           categorize_spend                                                    │
-│           get_runway_forecast                                                 │
-└───────────────────────────────────────────────────────────────────────────────┘
-
-Kubernetes (k8s/): namespace cpg-cfo-agent
-  gateway (2 replicas, HPA 2–5) | backend (2) | frontend (1) | kafka+zk (1)
-```
+The backend runs on Render's free tier, which sleeps after ~15 minutes of inactivity. First request after a cold start can take 30–60 seconds; everything after that is fast.
 
 ---
 
-## Key features
+## Features
 
-- **Agentic orchestration** — Four LLM agents chained as a directed state graph via LangGraph. Each agent specializes in one task and hands structured output to the next.
-- **Groq-accelerated inference** — Llama 3.3 70B served via Groq's inference API. JSON-mode responses keep outputs structured and parseable.
-- **Real-time dashboard** — Upload → analysis → results rendered in one page transition. Metric cards, anomaly list, recommendations, and the full executive brief.
-- **Firebase persistence** — Anonymous auth and Firestore storage so analysis history survives page refreshes.
-- **Go gRPC gateway** — Alternative high-throughput ingestion path. Validates CSV payloads and publishes to Kafka for async pipeline execution.
-- **Kafka event bus** — Decouples ingestion from processing. `transaction-ingestion` and `analysis-complete` topics enable fanout and replay.
-- **MCP server** — Exposes the pipeline as three Claude Desktop tools via FastMCP over stdio.
-- **Prometheus observability** — Request count, latency histograms, per-agent execution time, LLM token usage, and rolling pipeline success rate. Grafana dashboard auto-provisioned with 5 panels.
-- **Evaluation logging** — Every Kafka-path pipeline run is scored and persisted to Firestore `evaluations/` for quality tracking over time.
-- **Kubernetes-ready** — Production manifests with resource limits, health probes, Ingress, and HPA in `k8s/`.
+- **Four-agent LangGraph pipeline** — categorize spend, detect anomalies, forecast runway, generate an executive summary. Each agent is a separate graph node with its own prompt and JSON-mode output; nothing is one giant LLM call.
+- **Guest mode** — anyone can run the demo with zero signup friction. This matters specifically because the primary audience for a portfolio project is a recruiter or hiring manager who is not going to create an account to evaluate your work.
+- **Google OAuth and email/password auth** — both wired through the same Firebase Auth instance and the same `onAuthStateChanged` listener. Adding email/password didn't require touching the Google flow, the guest flow, or any of the per-user isolation logic — see [ARCHITECTURE.md](ARCHITECTURE.md#authentication) for why that was true by construction rather than luck.
+- **Per-user data isolation** — Firestore Security Rules check `request.auth.uid` against the document's `userId` and explicitly reject the `anonymous` sign-in provider, so guest sessions can run analyses but never persist them. Enforcement lives in the rules, not in application code that could have a bug in it.
+- **Backend token verification** — `POST /analyze` requires a valid Firebase ID token. Anonymous (guest) tokens are accepted deliberately; tokenless requests are not. This closes the gap where the API was fully anonymous-callable by anyone, without breaking the guest demo — see [ARCHITECTURE.md](ARCHITECTURE.md#authentication) for the reasoning and the failure mode this catches.
+- **Persistent analysis history** — signed-in users get a dashboard of past analyses (`/dashboard`, `/dashboard/[id]`), each one loaded and ownership-checked against the signed-in user's UID before rendering.
+- **Go gRPC gateway** — an alternative high-throughput ingestion path that validates CSVs and publishes to Kafka for async pipeline execution.
+- **Kafka event bus** — decouples ingestion from processing so the pipeline can be triggered from more than one entry point (HTTP, gRPC, eventually anything else that can publish to `transaction-ingestion`).
+- **MCP server** — exposes the pipeline as three tools inside Claude Desktop over stdio.
+- **Prometheus + Grafana** — request rate, latency histograms, and pipeline success rate are live; per-agent execution time and token usage are defined as metrics but not yet wired into the LangGraph nodes (see [Known gaps](#known-gaps)).
+- **Kubernetes manifests** — production-shaped deployments, services, HPA, and Ingress in `k8s/`, validated structurally but never applied to a live cluster.
+
+---
+
+## Architecture at a glance
+
+Three independent ingestion paths (HTTP, gRPC/Kafka, MCP) all feed the same LangGraph pipeline in `backend/agent.py`. The frontend is a set of Next.js routes — a public dark-themed landing page, a `/demo` route anyone can use, and `/dashboard` + `/analyze` routes gated behind real (non-anonymous) auth.
+
+Full system diagram, data flow per path, the auth/token-verification flow, and the reasoning behind the major technical choices live in **[ARCHITECTURE.md](ARCHITECTURE.md)**.
+
+---
+
+## Tech stack
+
+| Layer | Technology | Role |
+|-------|-----------|------|
+| Frontend | Next.js 16 + TypeScript | Landing page, demo, dashboard, auth pages |
+| Styling | Tailwind CSS 4 | Dark theme, animated background, design tokens |
+| Auth | Firebase Auth | Anonymous (guest), Google OAuth, email/password |
+| Backend | FastAPI + Uvicorn | REST API, agent runner, ID-token verification |
+| Orchestration | LangGraph 0.2 | Agent state graph |
+| LLM | Groq · Llama 3.3 70B | Inference (JSON mode) |
+| Data | Firebase Firestore | Per-user analysis history, evaluation logs |
+| Token verification | Firebase Admin SDK | Verifies ID tokens on `/analyze` |
+| gRPC Gateway | Go + grpc-go | Alternative high-throughput ingestion path |
+| Message bus | Apache Kafka (Confluent 7.6) | Async pipeline trigger, result fanout |
+| MCP | FastMCP 1.2 | Claude Desktop integration over stdio |
+| Observability | Prometheus + Grafana | Metrics on port 9090, dashboard on port 3001 |
+| Containerization | Docker + Docker Compose | Local development stack |
+| Kubernetes | k8s + nginx Ingress | Production deployment manifests (not applied live) |
+| Deployment | Vercel (frontend) + Render (backend) | Production hosting |
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+ and npm
+- Python 3.11 (Python 3.14 currently fails to build `pandas` from source — pin 3.11 locally and on Render)
+- A [Groq API key](https://console.groq.com)
+- A [Firebase project](https://console.firebase.google.com) with **Firestore**, **Anonymous auth**, **Google auth**, and **Email/Password auth** all enabled under Authentication → Sign-in method
+
+### 1. Clone and configure
+
+```bash
+git clone https://github.com/gaurannggg7/cpg-cfo-agent.git
+cd cpg-cfo-agent
+cp .env.example backend/.env
+cp .env.example frontend/.env.local
+```
+
+Fill in `backend/.env`:
+
+```
+GROQ_API_KEY=your_groq_key
+FIREBASE_PROJECT_ID=your_firebase_project_id
+```
+
+`FIREBASE_PROJECT_ID` alone is enough for local ID-token verification — verifying a token only needs the project id and Google's public signing certificates, not a privileged service-account key. See [ARCHITECTURE.md](ARCHITECTURE.md#credential-flow) for why the production path (Render) is different.
+
+Fill in `frontend/.env.local` with your Firebase web app config (`NEXT_PUBLIC_FIREBASE_*` values from Firebase Console → Project Settings → General → Your apps) and:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### 2. Run it
+
+**Frontend only, against a local backend:**
+
+```bash
+cd backend && pip install -r requirements.txt && uvicorn main:app --reload
+cd frontend && npm install && npm run dev
+```
+
+**Full stack (Kafka, gRPC gateway, Prometheus, Grafana included):**
+
+```bash
+docker-compose up --build
+```
+
+Then open `http://localhost:3000`, click **Try Demo**, and either upload `sample_transactions.csv` or click **Try Sample Data**.
+
+### 3. Deploying your own copy
+
+- **Frontend → Vercel.** Import the repo, set the `NEXT_PUBLIC_FIREBASE_*` and `NEXT_PUBLIC_API_URL` env vars in the Vercel dashboard, deploy.
+- **Backend → Render.** New Web Service, root directory `backend`, build command `pip install -r requirements.txt`, start command `uvicorn main:app --host 0.0.0.0 --port $PORT`. Set `GROQ_API_KEY` and `FIREBASE_SERVICE_ACCOUNT_BASE64` (see below) as env vars. Force Python 3.11 with a `PYTHON_VERSION` env var or a `.python-version` file — Render defaults to a newer Python that can't build `pandas` from source.
+- **`FIREBASE_SERVICE_ACCOUNT_BASE64`** — download a service-account JSON from Firebase Console → Project Settings → Service Accounts, then:
+  ```bash
+  base64 -i service-account.json | tr -d '\n'
+  ```
+  Paste the single-line output as the env var value. Base64-in-one-line was a deliberate choice over writing the raw JSON to a temp file at startup — multiline JSON inside a platform's env var UI is a common source of copy-paste corruption.
+
+---
+
+## Known gaps
+
+Being upfront about what's incomplete, rather than letting a reader find out by clicking:
+
+- **Two Grafana panels are permanently empty.** `Per-Agent Execution Time` and `LLM Token Usage` are defined as Prometheus metrics in `backend/monitoring.py`, but nothing calls `.observe()` or `.inc()` on them — they'd need instrumentation added inside `backend/agent.py`'s LangGraph nodes, and `agent.py` is intentionally left untouched as a stability boundary for this project.
+- **Footer social links are placeholders.** `components/landing/FooterCTA.tsx` has `TODO` markers for GitHub, LinkedIn, and a contact email — fill in your own before treating the landing page as final.
+- **A few landing components are dead code.** `Stats.tsx`, `HowItWorks.tsx`, `BuiltWith.tsx`, and the original `Footer.tsx` predate the dark-theme rebrand and aren't imported anywhere anymore. Left on disk rather than deleted in case any of that copy is worth recovering.
+- **Kubernetes manifests are unapplied.** They pass structural validation but have never been run against a live cluster — treat them as a demonstration of the shape of a production deployment, not as tested infrastructure.
 
 ---
 
@@ -98,25 +152,43 @@ CSV Upload  ──►  Categorize  ──►  Detect Anomalies  ──►  Forec
              S&M/R&D/Other         (Low/Med/High)         in months             summary
 ```
 
+Why four separate nodes instead of one prompt: each stage has a narrow, checkable output shape (a categorization dict, an anomaly list with a risk level, a runway number, free text). That makes it possible to inspect or replace any one stage without touching the others, and it makes failures attributable to a specific stage instead of "the LLM said something wrong somewhere."
+
 ---
 
-## Tech stack
+## Ingestion paths
 
-| Layer | Technology | Role |
-|-------|-----------|------|
-| Frontend | Next.js 16 + TypeScript | UI, upload form, results dashboard |
-| Styling | Tailwind CSS 4 | Design system |
-| Backend | FastAPI + Uvicorn | REST API, agent runner |
-| Orchestration | LangGraph 0.2 | Agent state graph |
-| LLM | Groq · Llama 3.3 70B | Inference (JSON mode) |
-| Auth & Storage | Firebase Firestore | Anonymous auth, persistence, evaluation logs |
-| gRPC Gateway | Go + grpc-go | Alternative high-throughput ingestion path |
-| Message bus | Apache Kafka (Confluent 7.6) | Async pipeline trigger, result fanout |
-| MCP | FastMCP 1.2 | Claude Desktop integration over stdio |
-| Observability | Prometheus + Grafana | Metrics on port 9090, dashboard on port 3001 |
-| Containerization | Docker + Docker Compose | Local development stack |
-| Kubernetes | k8s + nginx Ingress | Production deployment manifests |
-| Deployment | Vercel | Production hosting |
+Three independent paths feed the same pipeline:
+
+```
+┌─────────────────────────────── HTTP PATH (primary) ──────────────────────────┐
+│  Browser ──POST /analyze (multipart CSV, Bearer token)──► FastAPI :8000     │
+│                                                              │                │
+│                                                              ▼                │
+│                                                     LangGraph Pipeline        │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── gRPC / KAFKA PATH ────────────────────────────┐
+│  gRPC Client ──AnalyzeTransactions RPC──► Go Gateway :50051                  │
+│                                              │                                │
+│                                              ▼                                │
+│                                    Kafka "transaction-ingestion"              │
+│                                              │                                │
+│                                              ▼                                │
+│                                       kafka_consumer.py ──► LangGraph        │
+│                                              │                                │
+│                                              ├─► evaluation.py → Firestore   │
+│                                              └─► Kafka "analysis-complete"    │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── MCP PATH ─────────────────────────────────────┐
+│  Claude Desktop ──stdio──► FastMCP server (services/mcp/server.py)           │
+│                               3 tools: analyze_transactions,                 │
+│                               categorize_spend, get_runway_forecast          │
+└────────────────────────────────────────────────────────────────────────────────┘
+```
+
+Full data-flow-per-path detail is in [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
@@ -133,46 +205,7 @@ CSV Upload  ──►  Categorize  ──►  Detect Anomalies  ──►  Forec
 
 ---
 
-## Quick start (Docker Compose)
-
-**Prerequisites:** Docker Desktop, a [Groq API key](https://console.groq.com), and a [Firebase project](https://console.firebase.google.com) with Firestore enabled.
-
-**1. Clone**
-
-```bash
-git clone https://github.com/gaurannggg7/cpg-cfo-agent.git
-cd cpg-cfo-agent
-```
-
-**2. Configure environment**
-
-```bash
-cp .env.example backend/.env
-# Edit backend/.env — fill in GROQ_API_KEY and optionally GOOGLE_APPLICATION_CREDENTIALS
-
-cp .env.example frontend/.env.local
-# Edit frontend/.env.local — fill in all NEXT_PUBLIC_FIREBASE_* values
-```
-
-**3. Start**
-
-```bash
-docker-compose up --build
-```
-
-**4. Try it**
-
-Upload `sample_transactions.csv` from http://localhost:3000, or call the API directly:
-
-```bash
-curl -X POST http://localhost:8000/analyze \
-  -F "file=@sample_transactions.csv" \
-  -F "monthly_revenue=100000"
-```
-
----
-
-## Go gRPC Gateway
+## Go gRPC gateway
 
 The gateway lives in `services/gateway/`. It validates CSV payloads and publishes JSON envelopes to Kafka.
 
@@ -181,7 +214,6 @@ The gateway lives in `services/gateway/`. It validates CSV payloads and publishe
 ```bash
 cd services/gateway
 
-# Install protoc plugins (one-time)
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
@@ -189,7 +221,6 @@ make deps        # download Go modules
 make build       # generate stubs + compile binary → bin/gateway
 make test        # run unit tests (no proto-gen or Kafka needed)
 
-# Run locally (Kafka must be running)
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092 make run
 ```
 
@@ -206,23 +237,15 @@ docker run -e KAFKA_BOOTSTRAP_SERVERS=host.docker.internal:9092 -p 50051:50051 c
 
 The async consumer reads from `transaction-ingestion`, invokes the LangGraph pipeline, logs results to Firestore, and publishes to `analysis-complete`.
 
-**Start Kafka without the full stack:**
-
 ```bash
 docker compose -f services/kafka/docker-compose.kafka.yml up -d
-```
 
-**Run the consumer:**
-
-```bash
 cd backend
 pip install -r requirements.txt
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092 python kafka_consumer.py
 ```
 
 While the consumer runs, raw Prometheus metrics are available at `http://localhost:9090/metrics`.
-
-**Topics:**
 
 | Topic | Producer | Consumer |
 |-------|----------|----------|
@@ -241,7 +264,7 @@ While the consumer runs, raw Prometheus metrics are available at `http://localho
 | `categorize_spend(csv_data)` | Returns only the categorization output |
 | `get_runway_forecast(csv_data)` | Returns only the runway forecast |
 
-See [services/mcp/README.md](services/mcp/README.md) for Claude Desktop configuration and Docker setup.
+Runs over stdio, which means it's reachable only from a process that spawns it locally — it has never been exposed as a network service. See [services/mcp/README.md](services/mcp/README.md) for Claude Desktop configuration.
 
 ---
 
@@ -249,7 +272,7 @@ See [services/mcp/README.md](services/mcp/README.md) for Claude Desktop configur
 
 Access Grafana at http://localhost:3001 (admin/admin). The dashboard is provisioned automatically from `grafana/`.
 
-**Public live dashboard:** the local Prometheus also remote_writes to Grafana Cloud (see `prometheus/prometheus.yml.template` and the `prometheus-config`/`prometheus` services in `docker-compose.yml`). A public, no-login snapshot of the same dashboard is viewable here:
+**Public live dashboard:** the local Prometheus also remote_writes to Grafana Cloud (see `prometheus/prometheus.yml.template` and the `prometheus-config`/`prometheus` services in `docker-compose.yml`). A public, no-login snapshot of the same dashboard:
 
 [https://glowingpig1947.grafana.net/public-dashboards/67aa37ce287842f4bbc8230b921d72ff](https://glowingpig1947.grafana.net/public-dashboards/67aa37ce287842f4bbc8230b921d72ff)
 
@@ -257,21 +280,13 @@ Panels only populate while the local Docker stack is running and sending `/analy
 
 **Metrics** (defined in `backend/monitoring.py`):
 
-| Metric | Type | Labels | Description |
-|--------|------|--------|-------------|
-| `cpg_cfo_request_count_total` | Counter | `endpoint`, `status` | Requests by entry point and outcome |
-| `cpg_cfo_request_latency_seconds` | Histogram | `endpoint` | End-to-end latency; buckets 0.5s–60s |
-| `cpg_cfo_agent_execution_seconds` | Histogram | `agent` | Per-node LangGraph execution time |
-| `cpg_cfo_llm_token_usage_total` | Counter | `agent`, `token_type` | Groq tokens consumed |
-| `cpg_cfo_pipeline_success_rate` | Gauge | — | Rolling success rate 0.0–1.0 |
-
-**Grafana panels:**
-
-1. Request Rate — `rate(cpg_cfo_request_count_total[5m])` by endpoint/status
-2. Request Latency P50/P95/P99 — histogram quantiles over 5m
-3. Per-Agent Execution Time — average execution seconds per LangGraph node
-4. LLM Token Usage — token consumption rate by agent and token type
-5. Pipeline Success Rate — gauge with red/yellow/green thresholds at 0.8/0.95
+| Metric | Type | Labels | Description | Status |
+|--------|------|--------|-------------|--------|
+| `cpg_cfo_request_count_total` | Counter | `endpoint`, `status` | Requests by entry point and outcome | Live |
+| `cpg_cfo_request_latency_seconds` | Histogram | `endpoint` | End-to-end latency; buckets 0.5s–60s | Live |
+| `cpg_cfo_pipeline_success_rate` | Gauge | — | Rolling success rate 0.0–1.0 | Live |
+| `cpg_cfo_agent_execution_seconds` | Histogram | `agent` | Per-node LangGraph execution time | Defined, not instrumented |
+| `cpg_cfo_llm_token_usage_total` | Counter | `agent`, `token_type` | Groq tokens consumed | Defined, not instrumented |
 
 ---
 
@@ -297,9 +312,7 @@ Quality score (0–100): 40 pts if `summary` ≥ 100 chars; 20 pts each for non-
 
 ## Kubernetes deployment
 
-Manifests are in `k8s/`. All resources live in the `cpg-cfo-agent` namespace.
-
-**Prerequisites:** a running cluster, `kubectl`, and the nginx Ingress Controller.
+Manifests are in `k8s/`. All resources live in the `cpg-cfo-agent` namespace. **These have been structurally validated (12/12 well-formed manifests) but never applied to a live cluster.**
 
 ```bash
 kubectl apply -f k8s/namespace.yaml
@@ -313,23 +326,17 @@ kubectl apply -f k8s/deployments/
 kubectl apply -f k8s/services/
 kubectl apply -f k8s/ingress.yaml
 kubectl apply -f k8s/hpa.yaml
-
-kubectl get all -n cpg-cfo-agent
 ```
 
-**Dry-run:**
-
-```bash
-kubectl apply --dry-run=client -f k8s/
-```
-
-**HPA:** The gateway scales from 2 → 5 replicas at 70% CPU. Requires the [Metrics Server](https://github.com/kubernetes-sigs/metrics-server).
+**HPA:** the gateway scales from 2 → 5 replicas at 70% CPU. Requires the [Metrics Server](https://github.com/kubernetes-sigs/metrics-server).
 
 ---
 
 ## API reference
 
 ### `POST /analyze`
+
+Requires `Authorization: Bearer <firebase-id-token>`. Anonymous (guest) tokens are accepted; missing or invalid tokens get a `401`.
 
 **Request:** `multipart/form-data`
 
@@ -357,7 +364,7 @@ kubectl apply --dry-run=client -f k8s/
 
 ### `GET /health`
 
-Returns `{"status": "ok"}`. Used by Kubernetes liveness/readiness probes.
+Returns `{"status": "ok"}`. No auth required — used by Render/Kubernetes liveness and readiness probes, which don't carry a Firebase token.
 
 ### gRPC `AnalyzeTransactions` (port 50051)
 
@@ -370,69 +377,44 @@ See `services/gateway/proto/transaction.proto`. Returns `{status, job_id, messag
 ```
 cpg-cfo-agent/
 ├── backend/
-│   ├── agent.py              # LangGraph state machine + 4 agent nodes
-│   ├── main.py               # FastAPI app, /analyze endpoint
-│   ├── kafka_consumer.py     # Async Kafka → LangGraph consumer
-│   ├── monitoring.py         # Prometheus metrics definitions + HTTP server
-│   ├── evaluation.py         # Firestore evaluation logger
+│   ├── agent.py               # LangGraph state machine + 4 agent nodes (never modified post-authoring)
+│   ├── main.py                # FastAPI app, /analyze endpoint
+│   ├── auth.py                # Firebase ID-token verification dependency
+│   ├── kafka_consumer.py      # Async Kafka → LangGraph consumer
+│   ├── monitoring.py          # Prometheus metrics definitions + HTTP server
+│   ├── evaluation.py          # Firestore evaluation logger
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/
 │   ├── app/
-│   │   ├── page.tsx          # Main page — state orchestrator
-│   │   ├── layout.tsx
-│   │   └── globals.css
+│   │   ├── page.tsx            # Landing page
+│   │   ├── demo/page.tsx       # Public interactive demo
+│   │   ├── analyze/page.tsx    # Authenticated upload → saves to dashboard
+│   │   ├── dashboard/          # Analysis history (list + detail)
+│   │   ├── login/, signup/     # Email/password + Google auth forms
+│   │   └── layout.tsx          # Mounts the shared atmospheric background
 │   ├── components/
-│   │   ├── Dashboard.tsx
-│   │   ├── UploadForm.tsx
-│   │   └── landing/          # Hero, HowItWorks, BuiltWith, Stats, Footer
-│   ├── hooks/useAnalysisSave.ts
-│   ├── lib/firebase.ts
+│   │   ├── Dashboard.tsx        # Analysis result view (shared by /demo and /dashboard/[id])
+│   │   ├── UploadForm.tsx       # Shared by /demo and /analyze
+│   │   ├── Navbar.tsx           # Auth-aware nav, shared across every route
+│   │   ├── AuthBanner.tsx       # Guest-vs-Google choice banner
+│   │   ├── ScanlinesOverlay.tsx # Animated background (5 drifting lights + scanlines)
+│   │   └── landing/             # Hero, Problem, Pipeline, Capabilities, Architecture, Stack, FooterCTA
+│   ├── hooks/useAuth.ts, useAnalysisSave.ts
+│   ├── lib/firebase.ts, analyzeApi.ts
 │   └── package.json
 ├── services/
-│   ├── gateway/              # Go gRPC gateway
-│   │   ├── proto/transaction.proto
-│   │   ├── cmd/gateway/main.go
-│   │   ├── validate.go
-│   │   ├── gateway_test.go
-│   │   ├── gen/              # Generated by `make build` (gitignored)
-│   │   ├── go.mod
-│   │   ├── Makefile
-│   │   └── Dockerfile
-│   ├── kafka/
-│   │   └── docker-compose.kafka.yml  # Standalone Kafka dev setup
-│   └── mcp/
-│       ├── server.py         # FastMCP stdio server (3 tools)
-│       ├── requirements.txt
-│       ├── test_server.py
-│       ├── README.md
-│       └── Dockerfile
-├── k8s/                      # Kubernetes manifests
-│   ├── namespace.yaml
-│   ├── deployments/
-│   ├── services/
-│   ├── configmaps/
-│   ├── ingress.yaml
-│   └── hpa.yaml
-├── grafana/
-│   ├── dashboards/cpg-cfo-agent.json
-│   └── provisioning/
-│       ├── dashboards/dashboard.yml
-│       └── datasources/prometheus.yml
+│   ├── gateway/               # Go gRPC gateway
+│   ├── kafka/                 # Standalone Kafka dev compose file
+│   └── mcp/                   # FastMCP stdio server (3 tools)
+├── k8s/                       # Kubernetes manifests (validated, not applied live)
+├── grafana/                   # Dashboard + provisioning
 ├── prometheus/
-│   └── prometheus.yml
 ├── docker-compose.yml
 ├── .env.example
+├── ARCHITECTURE.md
 └── sample_transactions.csv
 ```
-
----
-
-## Live demo
-
-**[cpg-cfo-agent.vercel.app](https://cpg-cfo-agent.vercel.app)**
-
-Upload the included `sample_transactions.csv` to see a full analysis. The CSV must include columns: `date`, `amount`, `description`, `category`.
 
 ---
 

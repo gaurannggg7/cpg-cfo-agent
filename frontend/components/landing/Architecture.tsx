@@ -9,18 +9,13 @@ const DECISIONS = [
     body:
       'Lightweight per-user persistence without standing up a relational DB and migration layer.',
   },
-  {
-    title: 'Why guest mode',
-    body:
-      'Designed so a recruiter can evaluate the product without creating an account.',
-  },
 ];
 
 function Box({ children, accent }: { children: React.ReactNode; accent?: boolean }) {
   return (
     <span
       className={`px-4 py-2.5 rounded-lg border text-xs font-mono text-[#E2E8F0] whitespace-nowrap ${
-        accent ? 'border-[#7C3AED] text-[#06B6D4]' : 'border-white/[0.08] bg-[#0F0F12]'
+        accent ? 'border-[#7C3AED] text-[#06B6D4]' : 'border-white/[0.08] bg-[#0F0F12]/75'
       }`}
     >
       {children}
@@ -46,7 +41,7 @@ function RightArrow() {
 
 export default function Architecture() {
   return (
-    <section id="architecture" className="py-24 border-t border-white/[0.08] scroll-mt-16">
+    <section id="architecture" className="py-24 scroll-mt-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7C3AED] mb-3">
           System Design
@@ -55,7 +50,7 @@ export default function Architecture() {
           Architecture
         </h2>
 
-        <div className="bg-[#0F0F12] border border-white/[0.08] rounded-xl p-8 flex flex-col items-center gap-6">
+        <div className="bg-[#0F0F12]/75 border border-white/[0.08] rounded-xl p-8 flex flex-col items-center gap-6">
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Box>Next.js (TypeScript)</Box>
             <RightArrow />
@@ -81,7 +76,7 @@ export default function Architecture() {
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-6 mt-10">
+        <div className="grid sm:grid-cols-2 gap-6 mt-10">
           {DECISIONS.map((d) => (
             <div key={d.title}>
               <p className="text-xs font-bold uppercase tracking-wider text-[#7C3AED] mb-2">

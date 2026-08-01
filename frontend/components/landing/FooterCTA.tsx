@@ -7,7 +7,7 @@ const CONTACT_EMAIL = 'gaurangmohan25@gmail.com';
 
 export default function FooterCTA() {
   return (
-    <footer className="py-24 border-t border-white/[0.08]">
+    <footer className="py-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <h2 className="font-[family-name:var(--font-heading)] font-bold text-3xl sm:text-4xl tracking-tight mb-4">
           <span className="bg-gradient-to-r from-white to-[#06B6D4] bg-clip-text text-transparent">
