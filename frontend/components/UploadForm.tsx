@@ -44,9 +44,8 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-xl mx-auto">
-      <div className="bg-[#0F0F12] rounded-2xl border border-white/[0.08] shadow-sm p-8 space-y-6">
+      <div className="bg-[#0F0F12]/75 rounded-2xl border border-white/[0.08] shadow-sm p-8 space-y-6">
 
-        {/* File upload */}
         <div>
           <label className="block text-sm font-semibold text-[#E2E8F0] mb-2">
             Transaction File
@@ -104,7 +103,6 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
           </p>
         </div>
 
-        {/* Revenue input */}
         <div>
           <label htmlFor="monthly-revenue" className="block text-sm font-semibold text-[#E2E8F0] mb-2">
             Monthly Revenue
@@ -122,7 +120,6 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
           </div>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={!file || loading}

@@ -34,7 +34,7 @@ export default function AuthBanner() {
   };
 
   return (
-    <div className="bg-[#0F0F12] border-b border-white/[0.08]">
+    <div className="bg-[#0F0F12]/75">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p className="text-sm text-[#9CA3AF] text-center sm:text-left">
           Try the demo as a guest, or sign in with Google to save your analysis history.
