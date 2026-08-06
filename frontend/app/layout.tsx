@@ -1,19 +1,18 @@
 import type { Metadata } from 'next';
-import { Space_Grotesk, Inter } from 'next/font/google';
+import { Fraunces, IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
-import ScanlinesOverlay from '@/components/ScanlinesOverlay';
 
-const spaceGrotesk = Space_Grotesk({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  weight: ['700'],
-  variable: '--font-space-grotesk',
+  weight: ['600'],
+  variable: '--font-fraunces',
   display: 'swap',
 });
 
-const inter = Inter({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-inter',
+  weight: ['400', '500'],
+  variable: '--font-plex',
   display: 'swap',
 });
 
@@ -25,9 +24,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${plexSans.variable}`}>
       <body>
-        <ScanlinesOverlay />
         {children}
       </body>
     </html>

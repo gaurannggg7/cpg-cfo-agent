@@ -77,8 +77,8 @@ export default function SignupPage() {
       <Navbar user={user} />
 
       <main className="max-w-sm mx-auto px-4 sm:px-6 py-16 sm:py-24">
-        <div className="bg-[#0F0F12] rounded-2xl border border-white/[0.08] p-8">
-          <h1 className="font-[family-name:var(--font-heading)] font-bold text-2xl text-[#E2E8F0] tracking-tight mb-6 text-center">
+        <div className="bg-[var(--surface)] rounded-lg border border-[var(--border)] p-8">
+          <h1 className="font-[family-name:var(--font-heading)] font-semibold text-2xl text-[var(--text)] tracking-tight mb-6 text-center">
             Sign Up
           </h1>
 
@@ -86,27 +86,27 @@ export default function SignupPage() {
             type="button"
             onClick={handleGoogle}
             disabled={loading !== null}
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-white/[0.12] bg-white/[0.03] hover:bg-white/[0.06] text-[#E2E8F0] text-sm font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded border border-[var(--border-strong)] bg-[var(--surface-2)] hover:bg-[var(--border)] text-[var(--text)] text-sm font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <GoogleIcon />
             {loading === 'google' ? 'Signing in…' : 'Continue with Google'}
           </button>
 
           <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-white/[0.08]" />
-            <span className="text-xs text-[#9CA3AF] uppercase tracking-wider">or</span>
-            <div className="flex-1 h-px bg-white/[0.08]" />
+            <div className="flex-1 h-px bg-[var(--border)]" />
+            <span className="text-xs text-[var(--text-dim)] uppercase tracking-wider">or</span>
+            <div className="flex-1 h-px bg-[var(--border)]" />
           </div>
 
           {error && (
-            <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3">
-              <p className="text-sm text-red-400">{error}</p>
+            <div className="mb-4 rounded border border-[var(--accent-flag)]/30 bg-[var(--accent-flag)]/10 px-4 py-3">
+              <p className="text-sm text-[var(--accent-flag)]">{error}</p>
             </div>
           )}
 
           <form onSubmit={handleEmailSubmit} noValidate className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-[#E2E8F0] mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-[var(--text)] mb-2">
                 Email
               </label>
               <input
@@ -115,11 +115,11 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
-                className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.12] rounded-xl text-[#E2E8F0] text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent transition-shadow duration-200"
+                className="w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border-strong)] rounded text-[var(--text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-flag)] focus:border-transparent transition-shadow duration-200"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-[#E2E8F0] mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-[var(--text)] mb-2">
                 Password
               </label>
               <input
@@ -128,23 +128,23 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
-                className="w-full px-4 py-3 bg-white/[0.03] border border-white/[0.12] rounded-xl text-[#E2E8F0] text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent transition-shadow duration-200"
+                className="w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border-strong)] rounded text-[var(--text)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent-flag)] focus:border-transparent transition-shadow duration-200"
               />
-              <p className="text-xs text-[#9CA3AF] mt-1.5">At least 6 characters.</p>
+              <p className="text-xs text-[var(--text-dim)] mt-1.5">At least 6 characters.</p>
             </div>
 
             <button
               type="submit"
               disabled={loading !== null}
-              className="w-full py-3.5 px-6 rounded-xl font-semibold text-sm tracking-wide bg-[#7C3AED] hover:bg-[#6D28D9] text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-6 rounded font-semibold text-sm tracking-wide bg-[var(--accent-flag)] hover:bg-[var(--accent-flag-hover)] text-[var(--bg)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading === 'email' ? 'Creating account…' : 'Sign Up'}
             </button>
           </form>
 
-          <p className="text-sm text-[#9CA3AF] text-center mt-6">
+          <p className="text-sm text-[var(--text-dim)] text-center mt-6">
             Already have an account?{' '}
-            <Link href="/login" className="text-[#06B6D4] hover:underline">
+            <Link href="/login" className="text-[var(--accent-base)] hover:underline">
               Sign in
             </Link>
           </p>

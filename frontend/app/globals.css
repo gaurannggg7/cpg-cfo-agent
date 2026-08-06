@@ -5,96 +5,42 @@ html {
 }
 
 :root {
-  --background: #050505;
-  --foreground: #e2e8f0;
+  --background: #F5F0EB;
+  --foreground: #17140F;
 
-  --color-bg: #050505;
-  --color-card: #0f0f12;
-  --color-text-primary: #e2e8f0;
-  --color-text-secondary: #9ca3af;
-  --color-accent-violet: #7c3aed;
-  --color-accent-cyan: #06b6d4;
-  --color-border: rgba(255, 255, 255, 0.08);
+  --bg: #F5F0EB;
+  --surface: #FFFFFF;
+  --surface-2: #EFE8DE;
+  --border: #E5DDD0;
+  --border-strong: #D8CDBC;
+  --text: #17140F;
+  --text-dim: #6B6355;
+  --accent-flag: #A8613C;
+  --accent-flag-hover: #8B4E30;
+  --accent-base: #5C6B4A;
+  --accent-base-hover: #4A5639;
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-bg: var(--color-bg);
-  --color-card: var(--color-card);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-accent-violet: var(--color-accent-violet);
-  --color-accent-cyan: var(--color-accent-cyan);
-  --color-border: var(--color-border);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-space-grotesk);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-dim: var(--text-dim);
+  --color-accent-flag: var(--accent-flag);
+  --color-accent-base: var(--accent-base);
+  --font-sans: var(--font-plex);
+  --font-heading: var(--font-fraunces);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-plex), Arial, Helvetica, sans-serif;
   line-height: 1.6;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/*
- * Atmospheric lighting — five independent light sources drifting on their own
- * slow, non-repeating-looking paths. Percentages are of each element's own
- * (very large) box, so the actual travel is tens of pixels: the page should
- * read as "alive", never as "circles moving".
- */
-@keyframes drift-1 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(4%, 3%); }
-  50%  { transform: translate(2%, 6%); }
-  75%  { transform: translate(-3%, 2%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-2 {
-  0%   { transform: translate(0, 0); }
-  30%  { transform: translate(-5%, 4%); }
-  60%  { transform: translate(3%, -3%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-3 {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(3%, -4%); }
-  55%  { transform: translate(-4%, -2%); }
-  80%  { transform: translate(-2%, 4%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-4 {
-  0%   { transform: translate(0, 0); }
-  35%  { transform: translate(5%, 2%); }
-  70%  { transform: translate(-2%, -5%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-5 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-3%, -3%); }
-  50%  { transform: translate(-6%, 3%); }
-  75%  { transform: translate(2%, 5%); }
-  100% { transform: translate(0, 0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atmos-light {
-    animation: none !important;
-  }
 }

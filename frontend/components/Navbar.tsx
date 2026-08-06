@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { User } from 'firebase/auth';
 import { signInWithGoogle, signOutUser } from '@/lib/firebase';
 
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function Navbar({ user }: Props) {
+  const pathname = usePathname();
   const isGoogleUser = !!user && !user.isAnonymous;
   const isGuest = !!user && user.isAnonymous;
 
@@ -28,28 +30,33 @@ export default function Navbar({ user }: Props) {
     }
   };
 
+  // Same padding on every side for active and inactive states — only the
+  // bottom border differs, so nothing shifts when the route changes.
+  const navLinkClass = (href: string) => {
+    const active = pathname === href;
+    return `hidden sm:inline text-sm font-medium px-3 py-2 border-b-2 transition-colors duration-200 ${
+      active
+        ? 'text-[var(--text)] border-[var(--accent-flag)]'
+        : 'text-[var(--text-dim)] hover:text-[var(--text)] border-transparent'
+    }`;
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-sm border-b border-white/[0.08]">
+    <header className="sticky top-0 z-50 bg-[var(--bg)]/80 backdrop-blur-sm border-b border-[var(--border)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <Link
           href="/"
-          className="text-[#E2E8F0] font-bold text-sm tracking-widest uppercase font-[family-name:var(--font-heading)]"
+          className="text-[var(--text)] font-semibold text-sm tracking-widest uppercase font-[family-name:var(--font-heading)]"
         >
           Baseline
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-4">
-          <Link
-            href="/demo"
-            className="hidden sm:inline text-sm text-[#9CA3AF] hover:text-[#E2E8F0] transition-colors duration-200 font-medium"
-          >
+        <div className="flex items-center gap-1 sm:gap-1">
+          <Link href="/demo" className={navLinkClass('/demo')}>
             Demo
           </Link>
           {isGoogleUser && (
-            <Link
-              href="/dashboard"
-              className="text-sm text-[#9CA3AF] hover:text-[#E2E8F0] transition-colors duration-200 font-medium"
-            >
+            <Link href="/dashboard" className={navLinkClass('/dashboard')}>
               Dashboard
             </Link>
           )}
@@ -57,20 +64,20 @@ export default function Navbar({ user }: Props) {
             href="https://github.com/gaurannggg7/cpg-cfo-agent"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-4 py-1.5 rounded-lg font-medium transition-colors duration-200"
+            className="hidden sm:inline text-sm bg-[var(--accent-flag)] hover:bg-[var(--accent-flag-hover)] text-[var(--bg)] px-4 py-1.5 rounded-[2px] font-medium transition-colors duration-200 ml-2"
           >
             GitHub
           </a>
 
           {isGoogleUser && (
-            <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 border-l border-white/[0.08]">
-              <span className="hidden sm:inline text-xs text-[#9CA3AF] max-w-[140px] truncate">
+            <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 ml-2 border-l border-[var(--border)]">
+              <span className="hidden sm:inline text-xs text-[var(--text-dim)] max-w-[140px] truncate">
                 {user.email}
               </span>
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+                className="text-sm text-[var(--text)] hover:text-[var(--accent-flag)] font-medium transition-colors duration-200"
               >
                 Sign Out
               </button>
@@ -81,7 +88,7 @@ export default function Navbar({ user }: Props) {
             <button
               type="button"
               onClick={handleSignIn}
-              className="border-l border-white/[0.08] pl-3 text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+              className="border-l border-[var(--border)] pl-3 ml-2 text-sm text-[var(--text)] hover:text-[var(--accent-flag)] font-medium transition-colors duration-200"
             >
               Sign In with Google
             </button>
@@ -90,7 +97,7 @@ export default function Navbar({ user }: Props) {
           {!user && (
             <Link
               href="/login"
-              className="border-l border-white/[0.08] pl-3 text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+              className="border-l border-[var(--border)] pl-3 ml-2 text-sm text-[var(--text)] hover:text-[var(--accent-flag)] font-medium transition-colors duration-200"
             >
               Sign In
             </Link>

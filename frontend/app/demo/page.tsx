@@ -57,18 +57,15 @@ export default function DemoPage() {
       <Navbar user={user} />
       {!user && <AuthBanner />}
 
-      <section className="py-20">
+      <section className="py-32">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7C3AED] mb-3">
-              Interactive Demo
-            </p>
-            <h1 className="font-[family-name:var(--font-heading)] font-bold text-3xl text-[#E2E8F0] tracking-tight mb-3">
+          <div className="text-center mb-12">
+            <h1 className="font-[family-name:var(--font-heading)] font-semibold text-4xl sm:text-5xl text-[var(--text)] tracking-tight mb-4">
               Try It Yourself
             </h1>
-            <p className="text-[#9CA3AF] text-sm">
+            <p className="text-[var(--text-dim)] text-sm">
               Upload a CSV with columns:{' '}
-              <code className="bg-white/[0.06] px-1.5 py-0.5 rounded text-[#E2E8F0] text-xs">
+              <code className="bg-[var(--surface-2)] px-1.5 py-0.5 rounded text-[var(--text)] text-xs">
                 date, amount, description, category
               </code>
             </p>
@@ -77,7 +74,7 @@ export default function DemoPage() {
             {!authLoading && user && !user.isAnonymous && (
               <Link
                 href="/dashboard"
-                className="inline-flex items-center justify-center text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 mt-6"
+                className="inline-flex items-center justify-center text-sm bg-[var(--text)] hover:bg-[var(--text)]/85 text-[var(--bg)] px-4 py-2.5 rounded-[2px] font-medium transition-colors duration-200 mt-6"
               >
                 Go to Dashboard
               </Link>

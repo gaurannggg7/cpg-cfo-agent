@@ -60,15 +60,15 @@ export default function AnalyzePage() {
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
         <div className="text-center mb-10">
-          <p className="text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-3">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--text-dim)] mb-3">
             New Analysis
           </p>
-          <h1 className="font-[family-name:var(--font-heading)] text-3xl font-bold text-[#E2E8F0] tracking-tight mb-3">
+          <h1 className="font-[family-name:var(--font-heading)] text-3xl font-semibold text-[var(--text)] tracking-tight mb-3">
             Upload Transaction Data
           </h1>
-          <p className="text-[#9CA3AF] text-sm">
+          <p className="text-[var(--text-dim)] text-sm">
             Results are saved to{' '}
-            <Link href="/dashboard" className="underline hover:text-[#E2E8F0]">
+            <Link href="/dashboard" className="underline hover:text-[var(--text)]">
               your dashboard
             </Link>
             .
@@ -76,30 +76,30 @@ export default function AnalyzePage() {
         </div>
 
         {error && (
-          <div className="max-w-xl mx-auto mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4">
-            <p className="text-sm text-red-400">{error}</p>
+          <div className="max-w-xl mx-auto mb-6 rounded border border-[var(--accent-flag)]/30 bg-[var(--accent-flag)]/10 px-5 py-4">
+            <p className="text-sm text-[var(--accent-flag)]">{error}</p>
           </div>
         )}
 
         {savedId ? (
-          <div className="max-w-xl mx-auto bg-[#0F0F12] rounded-2xl border border-white/[0.08] p-8 text-center space-y-5">
+          <div className="max-w-xl mx-auto bg-[var(--surface)] rounded-lg border border-[var(--border)] p-8 text-center space-y-5">
             <div>
-              <p className="text-emerald-400 font-semibold text-lg">Analysis saved</p>
-              <p className="text-sm text-[#9CA3AF] mt-1">
+              <p className="text-[var(--accent-base)] font-semibold text-lg">Analysis saved</p>
+              <p className="text-sm text-[var(--text-dim)] mt-1">
                 It&apos;s now in your dashboard history.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={`/dashboard/${savedId}`}
-                className="inline-flex items-center justify-center text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200"
+                className="inline-flex items-center justify-center text-sm bg-[var(--accent-flag)] hover:bg-[var(--accent-flag-hover)] text-[var(--bg)] px-4 py-2.5 rounded font-medium transition-colors duration-200"
               >
                 View in Dashboard
               </Link>
               <button
                 type="button"
                 onClick={() => setSavedId(null)}
-                className="inline-flex items-center justify-center text-sm border border-white/[0.12] hover:border-white/25 text-[#E2E8F0] px-4 py-2.5 rounded-lg font-medium transition-colors duration-200"
+                className="inline-flex items-center justify-center text-sm border border-[var(--border-strong)] hover:border-[var(--text-dim)] text-[var(--text)] px-4 py-2.5 rounded font-medium transition-colors duration-200"
               >
                 Analyze Another File
               </button>
