@@ -10,7 +10,11 @@ langgraph==0.2.0
 aiokafka==0.10.0
 
 # Prometheus metrics (monitoring.py)
-prometheus-client==0.20.0
+prometheus-client==0.8.0
+
+# Prometheus FastAPI middleware (main.py) — auto-instruments request
+# count/latency and exposes /metrics on the app's own port.
+prometheus-fastapi-instrumentator==5.1.0
 
 # Firestore evaluation logging (evaluation.py)
 firebase-admin==6.5.0
