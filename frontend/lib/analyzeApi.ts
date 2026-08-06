@@ -1,5 +1,5 @@
 import type { AnalysisResult } from '@/components/Dashboard';
-import { auth, signInAnon } from '@/lib/firebase';
+import { getAuthInstance, signInAnon } from '@/lib/firebase';
 
 export class SessionExpiredError extends Error {
   constructor() {
@@ -16,6 +16,7 @@ export async function runAnalysis(
   // signInAnonymously() issues a real token. A visitor who hasn't picked
   // guest-or-Google yet gets an anonymous session on demand so the public
   // demo still works without an account.
+  const auth = getAuthInstance();
   if (!auth.currentUser) {
     await signInAnon();
   }

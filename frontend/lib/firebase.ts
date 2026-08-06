@@ -1,6 +1,7 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import {
   getFirestore,
+  type Firestore,
   collection,
   addDoc,
   serverTimestamp,
@@ -22,6 +23,7 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  type Auth,
   type User,
 } from 'firebase/auth';
 
@@ -34,30 +36,57 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+/**
+ * Lazily initialize Firebase. Calling getAuth/getFirestore at module top-level
+ * throws `auth/invalid-api-key` during import when the API key isn't inlined,
+ * which crashes the entire page. Deferring init keeps the page rendering and
+ * surfaces config errors only when an auth/data action is actually invoked.
+ */
+let _app: FirebaseApp | null = null;
+let _auth: Auth | null = null;
+let _db: Firestore | null = null;
+
+function getApp(): FirebaseApp {
+  if (!_app) {
+    _app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  }
+  return _app;
+}
+
+export function getAuthInstance(): Auth {
+  if (!_auth) {
+    _auth = getAuth(getApp());
+  }
+  return _auth;
+}
+
+function getDb(): Firestore {
+  if (!_db) {
+    _db = getFirestore(getApp());
+  }
+  return _db;
+}
 
 export async function signInAnon() {
-  return await signInAnonymously(auth);
+  return await signInAnonymously(getAuthInstance());
 }
 
 const googleProvider = new GoogleAuthProvider();
 
 export async function signInWithGoogle() {
-  return await signInWithPopup(auth, googleProvider);
+  return await signInWithPopup(getAuthInstance(), googleProvider);
 }
 
 export async function signOutUser() {
-  return await signOut(auth);
+  return await signOut(getAuthInstance());
 }
 
 export async function signUpWithEmail(email: string, password: string) {
-  return await createUserWithEmailAndPassword(auth, email, password);
+  return await createUserWithEmailAndPassword(getAuthInstance(), email, password);
 }
 
 export async function signInWithEmail(email: string, password: string) {
-  return await signInWithEmailAndPassword(auth, email, password);
+  return await signInWithEmailAndPassword(getAuthInstance(), email, password);
 }
 
 const AUTH_ERROR_MESSAGES: Record<string, string> = {
@@ -80,7 +109,15 @@ export function getAuthErrorMessage(error: unknown): string {
 
 /** Subscribe to auth state changes. Returns the unsubscribe function. */
 export function onAuthChange(callback: (user: User | null) => void) {
-  return onAuthStateChanged(auth, callback);
+  try {
+    return onAuthStateChanged(getAuthInstance(), callback);
+  } catch (error) {
+    // Firebase failed to initialize (e.g. missing/invalid API key). Treat the
+    // visitor as signed out so the page still renders instead of crashing.
+    console.error('[v0] Firebase auth unavailable:', error);
+    callback(null);
+    return () => {};
+  }
 }
 
 export async function saveAnalysis(
@@ -88,7 +125,7 @@ export async function saveAnalysis(
   userId: string,
   fileName?: string
 ) {
-  const docRef = await addDoc(collection(db, 'analyses'), {
+  const docRef = await addDoc(collection(getDb(), 'analyses'), {
     fileName: fileName ?? 'untitled.csv',
     summary: data.summary,
     categories: data.categories,
@@ -111,7 +148,7 @@ export interface StoredAnalysis extends AnalysisResult {
 
 export async function getUserAnalyses(userId: string): Promise<StoredAnalysis[]> {
   const q = query(
-    collection(db, 'analyses'),
+    collection(getDb(), 'analyses'),
     where('userId', '==', userId),
     orderBy('createdAt', 'desc')
   );
@@ -120,7 +157,7 @@ export async function getUserAnalyses(userId: string): Promise<StoredAnalysis[]>
 }
 
 export async function getAnalysisById(id: string): Promise<StoredAnalysis | null> {
-  const snapshot = await getDoc(doc(db, 'analyses', id));
+  const snapshot = await getDoc(doc(getDb(), 'analyses', id));
   if (!snapshot.exists()) return null;
   return { id: snapshot.id, ...snapshot.data() } as StoredAnalysis;
 }
