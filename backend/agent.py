@@ -1,20 +1,22 @@
 import os
 import json
+import time
 import pandas as pd
 from typing import TypedDict, Dict, Any
 from groq import Groq
 from langgraph.graph import StateGraph, END
 from dotenv import load_dotenv
 
-load_dotenv()
+# Import the metrics we need to track
+from monitoring import AGENT_EXECUTION_TIME, LLM_TOKEN_USAGE
 
+load_dotenv()
 
 def get_client():
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY not set")
     return Groq(api_key=api_key)
-
 
 class AgentState(TypedDict):
     csv_text: str
@@ -26,9 +28,22 @@ class AgentState(TypedDict):
     runway: Dict[str, Any]
     summary: str
 
+def _record_llm_metrics(agent_name: str, start_time: float, response: Any):
+    """Helper function to record execution time and token usage."""
+    # Record execution time
+    elapsed_time = time.time() - start_time
+    AGENT_EXECUTION_TIME.labels(agent=agent_name).observe(elapsed_time)
+    
+    # Record token usage if available in the response
+    if hasattr(response, 'usage') and response.usage:
+        LLM_TOKEN_USAGE.labels(agent=agent_name, token_type="prompt").inc(response.usage.prompt_tokens)
+        LLM_TOKEN_USAGE.labels(agent=agent_name, token_type="completion").inc(response.usage.completion_tokens)
+
 
 def categorize_transactions(state: AgentState):
     client = get_client()
+    start_time = time.time()
+    
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         response_format={"type": "json_object"},
@@ -42,11 +57,15 @@ def categorize_transactions(state: AgentState):
             )
         }]
     )
+    
+    _record_llm_metrics("categorize", start_time, response)
     return {"categorized": json.loads(response.choices[0].message.content)}
 
 
 def detect_anomalies(state: AgentState):
     client = get_client()
+    start_time = time.time()
+    
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         response_format={"type": "json_object"},
@@ -59,6 +78,8 @@ def detect_anomalies(state: AgentState):
             )
         }]
     )
+    
+    _record_llm_metrics("detect_anomalies", start_time, response)
     return {"anomalies": json.loads(response.choices[0].message.content)}
 
 
@@ -68,6 +89,7 @@ def calculate_runway(state: AgentState):
     monthly_rev = state["monthly_revenue"]
     months_left = (12 * monthly_rev / monthly_burn) if monthly_burn > 0 else 999
 
+    start_time = time.time()
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         response_format={"type": "json_object"},
@@ -79,11 +101,15 @@ def calculate_runway(state: AgentState):
             )
         }]
     )
+    
+    _record_llm_metrics("runway_calc", start_time, response)
     return {"runway": json.loads(response.choices[0].message.content)}
 
 
 def generate_cfo_summary(state: AgentState):
     client = get_client()
+    start_time = time.time()
+    
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{
@@ -97,7 +123,10 @@ def generate_cfo_summary(state: AgentState):
             )
         }]
     )
+    
+    _record_llm_metrics("summarize", start_time, response)
     return {"summary": response.choices[0].message.content}
+
 
 workflow = StateGraph(AgentState)
 
