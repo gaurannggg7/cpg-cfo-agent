@@ -27,14 +27,11 @@ export default function Capabilities() {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-5">
-          {CAPABILITIES.map(({ name, description }, i) => (
+          {CAPABILITIES.map(({ name, description }) => (
             <div
               key={name}
               className="bg-[var(--surface)] rounded-[2px] p-8 shadow-[var(--shadow-card)]"
             >
-              <p className="text-sm font-mono text-[var(--text-dim)] mb-4">
-                {String(i + 1).padStart(2, '0')}
-              </p>
               <h3 className="font-[family-name:var(--font-heading)] text-lg font-semibold text-[var(--text)] mb-2">{name}</h3>
               <p className="text-sm text-[var(--text-dim)] leading-relaxed">{description}</p>
             </div>

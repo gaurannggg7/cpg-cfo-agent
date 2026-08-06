@@ -7,7 +7,7 @@ scrape_configs:
     scheme: https
     static_configs:
       - targets: ['cpg-cfo-agent.onrender.com']
-
+      
 remote_write:
   - url: ${GRAFANA_CLOUD_REMOTE_WRITE_URL}
     basic_auth:
