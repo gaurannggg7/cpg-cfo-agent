@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { User } from 'firebase/auth';
 import { signInWithGoogle, signOutUser } from '@/lib/firebase';
 
@@ -9,8 +10,16 @@ interface Props {
 }
 
 export default function Navbar({ user }: Props) {
+  const pathname = usePathname();
   const isGoogleUser = !!user && !user.isAnonymous;
   const isGuest = !!user && user.isAnonymous;
+
+  const navLinkClass = (href: string) =>
+    `text-sm transition-colors duration-200 border-b-2 pb-1 ${
+      pathname === href
+        ? 'text-accent border-accent'
+        : 'text-text-secondary border-transparent hover:text-text-primary'
+    }`;
 
   const handleSignIn = async () => {
     try {
@@ -40,17 +49,11 @@ export default function Navbar({ user }: Props) {
         </Link>
 
         <nav className="flex items-center gap-6 sm:gap-8">
-          <Link
-            href="/demo"
-            className="hidden sm:inline text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
-          >
+          <Link href="/demo" className={`hidden sm:inline ${navLinkClass('/demo')}`}>
             Demo
           </Link>
           {isGoogleUser && (
-            <Link
-              href="/dashboard"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
-            >
+            <Link href="/dashboard" className={navLinkClass('/dashboard')}>
               Dashboard
             </Link>
           )}
@@ -91,7 +94,7 @@ export default function Navbar({ user }: Props) {
           {!user && (
             <Link
               href="/login"
-              className="inline-flex items-center bg-text-primary text-bg text-sm font-medium px-4 py-1.5 hover:bg-white transition-colors duration-200"
+              className="inline-flex items-center bg-accent text-accent-foreground text-sm font-medium px-4 py-1.5 hover:bg-accent-hover transition-colors duration-200"
             >
               Sign In
             </Link>

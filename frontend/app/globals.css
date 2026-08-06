@@ -6,15 +6,17 @@ html {
 
 :root {
   --background: #09090b;
-  --foreground: #fafafa;
+  --foreground: #e0e0e0;
 
   --color-bg: #09090b;
   --color-surface: #121214;
   --color-surface-hover: #17171a;
-  --color-text-primary: #fafafa;
+  --color-text-primary: #e0e0e0;
   --color-text-secondary: #a1a1aa;
   --color-text-muted: #71717a;
-  --color-accent: #6366f1;
+  --color-accent: #10b981;
+  --color-accent-hover: #1a6e5c;
+  --color-accent-foreground: #09090b;
   --color-border: #27272a;
   --color-border-strong: #3f3f46;
 }
@@ -29,6 +31,8 @@ html {
   --color-text-secondary: var(--color-text-secondary);
   --color-text-muted: var(--color-text-muted);
   --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-foreground: var(--color-accent-foreground);
   --color-border: var(--color-border);
   --color-border-strong: var(--color-border-strong);
   --font-sans: var(--font-inter);

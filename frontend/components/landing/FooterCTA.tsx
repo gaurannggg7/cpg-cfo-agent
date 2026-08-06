@@ -20,7 +20,7 @@ export default function FooterCTA() {
               href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center bg-text-primary text-bg text-sm font-medium px-6 py-3 hover:bg-white transition-colors duration-200"
+              className="inline-flex items-center bg-accent text-accent-foreground text-sm font-medium px-6 py-3 hover:bg-accent-hover transition-colors duration-200"
             >
               View GitHub
             </a>

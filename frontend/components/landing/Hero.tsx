@@ -26,7 +26,7 @@ export default function Hero({ user }: Props) {
           {isGoogleUser ? (
             <Link
               href="/dashboard"
-              className="inline-flex items-center bg-text-primary text-bg text-sm font-medium px-6 py-3 hover:bg-white transition-colors duration-200"
+              className="inline-flex items-center bg-accent text-accent-foreground text-sm font-medium px-6 py-3 hover:bg-accent-hover transition-colors duration-200"
             >
               Go to Dashboard
             </Link>
@@ -34,7 +34,7 @@ export default function Hero({ user }: Props) {
             <>
               <Link
                 href="/demo"
-                className="inline-flex items-center bg-text-primary text-bg text-sm font-medium px-6 py-3 hover:bg-white transition-colors duration-200"
+                className="inline-flex items-center bg-accent text-accent-foreground text-sm font-medium px-6 py-3 hover:bg-accent-hover transition-colors duration-200"
               >
                 Try Demo
               </Link>

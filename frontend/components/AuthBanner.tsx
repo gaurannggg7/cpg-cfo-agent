@@ -53,7 +53,7 @@ export default function AuthBanner() {
             type="button"
             onClick={handleGoogle}
             disabled={loadingAction !== null}
-            className="text-sm px-4 py-1.5 bg-text-primary text-bg hover:bg-white transition-colors duration-200 font-medium disabled:opacity-50 whitespace-nowrap"
+            className="text-sm px-4 py-1.5 bg-accent text-accent-foreground hover:bg-accent-hover transition-colors duration-200 font-medium disabled:opacity-50 whitespace-nowrap"
           >
             {loadingAction === 'google' ? 'Signing in…' : 'Sign In with Google'}
           </button>

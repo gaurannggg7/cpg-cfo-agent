@@ -24,8 +24,12 @@ export default function Pipeline() {
               key={stage.name}
               className="relative border-b border-r border-border p-6 min-h-[160px] flex flex-col justify-between group hover:bg-surface transition-colors duration-200"
             >
+              <span
+                className="absolute left-0 top-0 h-full w-0.5 bg-accent scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-200"
+                aria-hidden="true"
+              />
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-text-muted">
+                <span className="font-mono text-xs text-text-muted group-hover:text-accent transition-colors duration-200">
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 {i < STAGES.length - 1 && (
