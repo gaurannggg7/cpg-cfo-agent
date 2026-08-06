@@ -6,9 +6,11 @@ from dotenv import load_dotenv
 from agent import cfo_app
 from auth import require_firebase_user
 from monitoring import start_metrics_server, REQUEST_COUNT, REQUEST_LATENCY, record_pipeline_result
+from prometheus_fastapi_instrumentator import Instrumentator
 import time
 load_dotenv()
 app = FastAPI(title="CPG CFO Agent API")
+Instrumentator().instrument(app).expose(app)
 @app.on_event("startup")
 async def startup_event():
     start_metrics_server(9090)
