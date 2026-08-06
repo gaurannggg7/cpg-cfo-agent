@@ -29,26 +29,27 @@ export default function Navbar({ user }: Props) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-sm border-b border-white/[0.08]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-border">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="text-[#E2E8F0] font-bold text-sm tracking-widest uppercase font-[family-name:var(--font-heading)]"
+          className="flex items-center gap-2 text-text-primary font-mono text-sm font-medium tracking-tight"
         >
-          Baseline
+          <span className="w-1.5 h-1.5 bg-accent" aria-hidden="true" />
+          baseline
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-4">
+        <nav className="flex items-center gap-6 sm:gap-8">
           <Link
             href="/demo"
-            className="hidden sm:inline text-sm text-[#9CA3AF] hover:text-[#E2E8F0] transition-colors duration-200 font-medium"
+            className="hidden sm:inline text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
           >
             Demo
           </Link>
           {isGoogleUser && (
             <Link
               href="/dashboard"
-              className="text-sm text-[#9CA3AF] hover:text-[#E2E8F0] transition-colors duration-200 font-medium"
+              className="text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
             >
               Dashboard
             </Link>
@@ -57,20 +58,20 @@ export default function Navbar({ user }: Props) {
             href="https://github.com/gaurannggg7/cpg-cfo-agent"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline text-sm bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-4 py-1.5 rounded-lg font-medium transition-colors duration-200"
+            className="hidden sm:inline text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
           >
             GitHub
           </a>
 
           {isGoogleUser && (
-            <div className="flex items-center gap-2 sm:gap-3 pl-2 sm:pl-3 border-l border-white/[0.08]">
-              <span className="hidden sm:inline text-xs text-[#9CA3AF] max-w-[140px] truncate">
+            <div className="flex items-center gap-4 pl-4 sm:pl-6 border-l border-border">
+              <span className="hidden sm:inline font-mono text-xs text-text-muted max-w-[140px] truncate">
                 {user.email}
               </span>
               <button
                 type="button"
                 onClick={handleSignOut}
-                className="text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+                className="text-sm text-text-secondary hover:text-text-primary font-medium transition-colors duration-200"
               >
                 Sign Out
               </button>
@@ -81,21 +82,21 @@ export default function Navbar({ user }: Props) {
             <button
               type="button"
               onClick={handleSignIn}
-              className="border-l border-white/[0.08] pl-3 text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+              className="border-l border-border pl-4 sm:pl-6 text-sm text-text-secondary hover:text-text-primary font-medium transition-colors duration-200"
             >
-              Sign In with Google
+              Sign In
             </button>
           )}
 
           {!user && (
             <Link
               href="/login"
-              className="border-l border-white/[0.08] pl-3 text-sm text-[#E2E8F0] hover:text-[#06B6D4] font-medium transition-colors duration-200"
+              className="inline-flex items-center bg-text-primary text-bg text-sm font-medium px-4 py-1.5 hover:bg-white transition-colors duration-200"
             >
               Sign In
             </Link>
           )}
-        </div>
+        </nav>
       </div>
     </header>
   );

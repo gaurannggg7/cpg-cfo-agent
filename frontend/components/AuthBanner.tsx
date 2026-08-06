@@ -34,18 +34,18 @@ export default function AuthBanner() {
   };
 
   return (
-    <div className="bg-[#0F0F12]/75">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-sm text-[#9CA3AF] text-center sm:text-left">
+    <div className="border-b border-border bg-surface">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-sm text-text-secondary text-center sm:text-left">
           Try the demo as a guest, or sign in with Google to save your analysis history.
         </p>
-        <div className="flex items-center gap-3 flex-shrink-0">
-          {error && <span className="text-xs text-red-400">{error}</span>}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {error && <span className="font-mono text-xs text-red-400">{error}</span>}
           <button
             type="button"
             onClick={handleGuest}
             disabled={loadingAction !== null}
-            className="text-sm px-3 py-1.5 rounded-lg border border-white/[0.08] text-[#E2E8F0] hover:border-white/20 transition-colors duration-200 disabled:opacity-50 whitespace-nowrap"
+            className="text-sm px-4 py-1.5 border border-border text-text-primary hover:border-border-strong transition-colors duration-200 disabled:opacity-50 whitespace-nowrap"
           >
             {loadingAction === 'guest' ? 'Starting…' : 'Try Demo as Guest'}
           </button>
@@ -53,7 +53,7 @@ export default function AuthBanner() {
             type="button"
             onClick={handleGoogle}
             disabled={loadingAction !== null}
-            className="text-sm px-3 py-1.5 rounded-lg bg-[#7C3AED] hover:bg-[#6D28D9] text-white transition-colors duration-200 font-medium disabled:opacity-50 whitespace-nowrap"
+            className="text-sm px-4 py-1.5 bg-text-primary text-bg hover:bg-white transition-colors duration-200 font-medium disabled:opacity-50 whitespace-nowrap"
           >
             {loadingAction === 'google' ? 'Signing in…' : 'Sign In with Google'}
           </button>

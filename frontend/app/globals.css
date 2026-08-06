@@ -5,30 +5,35 @@ html {
 }
 
 :root {
-  --background: #050505;
-  --foreground: #e2e8f0;
+  --background: #09090b;
+  --foreground: #fafafa;
 
-  --color-bg: #050505;
-  --color-card: #0f0f12;
-  --color-text-primary: #e2e8f0;
-  --color-text-secondary: #9ca3af;
-  --color-accent-violet: #7c3aed;
-  --color-accent-cyan: #06b6d4;
-  --color-border: rgba(255, 255, 255, 0.08);
+  --color-bg: #09090b;
+  --color-surface: #121214;
+  --color-surface-hover: #17171a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-accent: #6366f1;
+  --color-border: #27272a;
+  --color-border-strong: #3f3f46;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-bg: var(--color-bg);
-  --color-card: var(--color-card);
+  --color-surface: var(--color-surface);
+  --color-surface-hover: var(--color-surface-hover);
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
-  --color-accent-violet: var(--color-accent-violet);
-  --color-accent-cyan: var(--color-accent-cyan);
+  --color-text-muted: var(--color-text-muted);
+  --color-accent: var(--color-accent);
   --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-space-grotesk);
+  --font-heading: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 body {
@@ -36,6 +41,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 @keyframes fadeIn {
@@ -46,55 +52,5 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/*
- * Atmospheric lighting — five independent light sources drifting on their own
- * slow, non-repeating-looking paths. Percentages are of each element's own
- * (very large) box, so the actual travel is tens of pixels: the page should
- * read as "alive", never as "circles moving".
- */
-@keyframes drift-1 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(4%, 3%); }
-  50%  { transform: translate(2%, 6%); }
-  75%  { transform: translate(-3%, 2%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-2 {
-  0%   { transform: translate(0, 0); }
-  30%  { transform: translate(-5%, 4%); }
-  60%  { transform: translate(3%, -3%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-3 {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(3%, -4%); }
-  55%  { transform: translate(-4%, -2%); }
-  80%  { transform: translate(-2%, 4%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-4 {
-  0%   { transform: translate(0, 0); }
-  35%  { transform: translate(5%, 2%); }
-  70%  { transform: translate(-2%, -5%); }
-  100% { transform: translate(0, 0); }
-}
-
-@keyframes drift-5 {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(-3%, -3%); }
-  50%  { transform: translate(-6%, 3%); }
-  75%  { transform: translate(2%, 5%); }
-  100% { transform: translate(0, 0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .atmos-light {
-    animation: none !important;
   }
 }

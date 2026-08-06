@@ -1,43 +1,50 @@
-const STAGES = ['UPLOAD', 'INGEST', 'ANALYZE', 'DETECT', 'REASON', 'RECOMMEND'];
-
-function Arrow({ vertical }: { vertical: boolean }) {
-  return (
-    <svg
-      className={`text-[#7C3AED] flex-shrink-0 ${vertical ? 'w-4 h-4 rotate-90 sm:rotate-0' : 'w-4 h-4'}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-    </svg>
-  );
-}
+const STAGES = [
+  { name: 'UPLOAD', desc: 'Ingest transactional files' },
+  { name: 'INGEST', desc: 'Normalize and structure' },
+  { name: 'ANALYZE', desc: 'Establish the baseline' },
+  { name: 'DETECT', desc: 'Surface deviations' },
+  { name: 'REASON', desc: 'Explain what changed' },
+  { name: 'RECOMMEND', desc: 'Propose next actions' },
+] as const;
 
 export default function Pipeline() {
   return (
-    <section className="py-24">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7C3AED] mb-3">
-            How It Works
-          </p>
-          <h2 className="font-[family-name:var(--font-heading)] font-bold text-3xl text-[#E2E8F0] tracking-tight">
-            Six stages, explicitly separated
+    <section className="border-t border-border">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="flex items-baseline justify-between mb-14 flex-wrap gap-2">
+          <h2 className="font-heading font-semibold text-3xl sm:text-4xl tracking-[-0.02em] text-text-primary">
+            The pipeline
           </h2>
+          <span className="font-mono text-xs text-text-muted">06 stages</span>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-3">
+        <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 border-t border-l border-border">
           {STAGES.map((stage, i) => (
-            <div key={stage} className="flex flex-col sm:flex-row items-center gap-3">
-              <span className="px-4 py-2 rounded-full border border-white/[0.08] bg-[#0F0F12]/75 text-[#E2E8F0] text-xs font-mono tracking-wider">
-                {stage}
-              </span>
-              {i < STAGES.length - 1 && <Arrow vertical />}
-            </div>
+            <li
+              key={stage.name}
+              className="relative border-b border-r border-border p-6 min-h-[160px] flex flex-col justify-between group hover:bg-surface transition-colors duration-200"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-xs text-text-muted">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {i < STAGES.length - 1 && (
+                  <span className="text-accent text-sm hidden lg:inline" aria-hidden="true">
+                    →
+                  </span>
+                )}
+              </div>
+              <div>
+                <p className="font-mono text-sm font-medium tracking-wide text-text-primary mb-1.5">
+                  {stage.name}
+                </p>
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  {stage.desc}
+                </p>
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
