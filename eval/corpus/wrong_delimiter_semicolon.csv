@@ -1,0 +1,31 @@
+date;amount;description;category
+2025-10-24;-7182.18;Payroll Taxes;Payroll
+2025-05-19;-4293.18;Email Campaign - Klaviyo;Payroll
+2025-02-01;-6593.88;Freight - XPO Logistics;Rent
+2025-05-26;-6463.82;Email Campaign - Klaviyo;Logistics
+2025-01-12;-8468.80;AWS Hosting;Operations
+2025-03-01;-4468.55;Electricity - Warehouse;Marketing
+2025-03-08;-6658.35;HQ Office Rent;Software
+2025-09-12;-771.20;Ingredient Supplier - FlavorTech;Software
+2025-10-09;-2536.66;Cleaning Services;Software
+2025-10-09;-2541.87;HQ Office Rent;Logistics
+2025-07-14;-8621.69;Cleaning Services;Payroll
+2025-04-01;-1404.12;Email Campaign - Klaviyo;Utilities
+2025-01-07;-4390.42;Co-Packer Fees - CPG Manufacturing;Operations
+2025-05-15;-2573.28;Cleaning Services;Software
+2025-10-01;-3354.82;Co-Packer Fees - CPG Manufacturing;Logistics
+2025-03-06;-6229.92;Office Supplies - Staples;COGS
+2025-08-22;-8100.82;QuickBooks Subscription;Professional Services
+2025-07-20;-3612.72;HQ Office Rent;Payroll
+2025-09-04;-5726.89;Raw Materials - Packaging Corp;Utilities
+2025-02-04;-8862.78;Ingredient Supplier - FlavorTech;Operations
+2025-02-26;-3093.48;Raw Materials - Packaging Corp;Payroll
+2025-01-01;-5122.71;Office Supplies - Staples;Payroll
+2025-07-06;-5542.95;Payroll Taxes;Utilities
+2025-07-12;-1379.53;Freight - XPO Logistics;Logistics
+2025-07-06;-4293.66;Payroll Taxes;Rent
+2025-08-27;-4349.54;Freight - XPO Logistics;Payroll
+2025-03-15;-964.58;AWS Hosting;Marketing
+2025-09-03;-7468.26;Cleaning Services;Professional Services
+2025-01-12;-1886.67;Office Supplies - Staples;Logistics
+2025-03-17;-6226.10;Raw Materials - Packaging Corp;Professional Services

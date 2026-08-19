@@ -1,0 +1,13 @@
+{
+  "spike_row_index": 25,
+  "spike_amount": -85000.0,
+  "spike_date": "2025-04-06",
+  "spike_description": "Co-Packer Fees - CPG Manufacturing",
+  "spike_category": "COGS",
+  "normal_amount_range": [
+    -400.0,
+    -200.0
+  ],
+  "n_rows": 50,
+  "note": "Detector must flag exactly this row. Sidecar is never sent to the pipeline \u2014 scoring is against these values, not cell text."
+}

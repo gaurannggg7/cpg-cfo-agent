@@ -9,8 +9,12 @@ export interface Metrics {
 }
 
 interface RunwayData {
-  runway_months?: number;
+  runway_months?: number | null;
   recommendations?: string[];
+  // Set by the backend whenever runway_months is null — cash_on_hand wasn't
+  // supplied, or revenue already covers spend. Surfaced instead of leaving
+  // the reader to guess why the number is missing.
+  reason?: string | null;
 }
 
 interface AnomalyData {
@@ -101,6 +105,12 @@ export default function Dashboard({ data, onNewAnalysis }: Props) {
           accent={!!runway?.runway_months}
         />
       </div>
+
+      {!runway?.runway_months && runway?.reason && (
+        <p className="text-xs text-[var(--text-dim)] -mt-2 px-1">
+          Runway not shown: {runway.reason}.
+        </p>
+      )}
 
       <SpendByCategoryChart categories={categories} />
 

@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
-import { runAnalysis, SessionExpiredError } from '@/lib/analyzeApi';
+import { runAnalysis } from '@/lib/analyzeApi';
+import { AnalysisApiError } from '@/lib/analysisErrors';
 import Navbar from '@/components/Navbar';
 import UploadForm from '@/components/UploadForm';
+import AnalysisProgress, { useElapsedMs } from '@/components/AnalysisProgress';
+import ResultsSkeleton from '@/components/ResultsSkeleton';
+import AnalysisError from '@/components/AnalysisError';
 
 export default function AnalyzePage() {
   const { user, loading: authLoading } = useAuth();
@@ -16,7 +20,8 @@ export default function AnalyzePage() {
 
   const [loading, setLoading] = useState(false);
   const [savedId, setSavedId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AnalysisApiError | null>(null);
+  const elapsedMs = useElapsedMs(loading);
 
   const isSignedIn = !!user && !user.isAnonymous;
 
@@ -26,20 +31,20 @@ export default function AnalyzePage() {
     if (!isSignedIn) router.replace('/login');
   }, [authLoading, isSignedIn, router]);
 
-  const handleAnalyze = async (file: File, monthlyRevenue: number) => {
+  const handleAnalyze = async (file: File, monthlyRevenue: number, cashOnHand?: number) => {
     if (!user) return;
     setLoading(true);
     setError(null);
     try {
-      const data = await runAnalysis(file, monthlyRevenue);
+      const data = await runAnalysis(file, monthlyRevenue, cashOnHand);
       const id = await save(data, user.uid, file.name);
       setSavedId(id ?? null);
     } catch (err) {
       console.error('Analysis failed:', err);
       setError(
-        err instanceof SessionExpiredError
-          ? err.message
-          : 'Analysis failed. Is the backend running? Check console for details.'
+        err instanceof AnalysisApiError
+          ? err
+          : new AnalysisApiError(0, 'network', 'The request failed.')
       );
     } finally {
       setLoading(false);
@@ -75,13 +80,18 @@ export default function AnalyzePage() {
           </p>
         </div>
 
-        {error && (
-          <div className="max-w-xl mx-auto mb-6 rounded border border-[var(--accent-flag)]/30 bg-[var(--accent-flag)]/10 px-5 py-4">
-            <p className="text-sm text-[var(--accent-flag)]">{error}</p>
+        {error && !loading && (
+          <div className="mb-6">
+            <AnalysisError error={error} onRetry={() => setError(null)} />
           </div>
         )}
 
-        {savedId ? (
+        {loading ? (
+          <div className="space-y-8">
+            <AnalysisProgress elapsedMs={elapsedMs} />
+            <ResultsSkeleton />
+          </div>
+        ) : savedId ? (
           <div className="max-w-xl mx-auto bg-[var(--surface)] rounded-lg border border-[var(--border)] p-8 text-center space-y-5">
             <div>
               <p className="text-[var(--accent-base)] font-semibold text-lg">Analysis saved</p>
@@ -106,7 +116,7 @@ export default function AnalyzePage() {
             </div>
           </div>
         ) : (
-          <UploadForm onAnalyze={handleAnalyze} loading={loading} />
+          <UploadForm onAnalyze={handleAnalyze} />
         )}
       </main>
     </div>

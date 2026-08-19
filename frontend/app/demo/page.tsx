@@ -4,18 +4,24 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useAnalysisSave } from '@/hooks/useAnalysisSave';
-import { runAnalysis, SessionExpiredError } from '@/lib/analyzeApi';
+import { runAnalysis } from '@/lib/analyzeApi';
+import { AnalysisApiError } from '@/lib/analysisErrors';
 import Navbar from '@/components/Navbar';
 import AuthBanner from '@/components/AuthBanner';
 import UploadForm from '@/components/UploadForm';
 import Dashboard, { type AnalysisResult } from '@/components/Dashboard';
+import AnalysisProgress, { useElapsedMs } from '@/components/AnalysisProgress';
+import ResultsSkeleton from '@/components/ResultsSkeleton';
+import AnalysisError from '@/components/AnalysisError';
 
 export default function DemoPage() {
   const [results, setResults] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<AnalysisApiError | null>(null);
   const { user, loading: authLoading } = useAuth();
   const { save } = useAnalysisSave();
   const prevUidRef = useRef<string | null>(null);
+  const elapsedMs = useElapsedMs(loading);
 
   useEffect(() => {
     const uid = user?.uid ?? null;
@@ -28,10 +34,11 @@ export default function DemoPage() {
     prevUidRef.current = uid;
   }, [user?.uid]);
 
-  const handleAnalyze = async (file: File, monthlyRevenue: number) => {
+  const handleAnalyze = async (file: File, monthlyRevenue: number, cashOnHand?: number) => {
     setLoading(true);
+    setError(null);
     try {
-      const data = await runAnalysis(file, monthlyRevenue);
+      const data = await runAnalysis(file, monthlyRevenue, cashOnHand);
 
       // Guests (anonymous) never persist results — Firestore rules reject
       // anonymous writes, so skipping the call keeps the demo working for them.
@@ -40,12 +47,12 @@ export default function DemoPage() {
       }
 
       setResults(data);
-    } catch (error) {
-      console.error('Analysis failed:', error);
-      alert(
-        error instanceof SessionExpiredError
-          ? error.message
-          : 'Analysis failed. Is the backend running? Check console for details.'
+    } catch (err) {
+      console.error('Analysis failed:', err);
+      setError(
+        err instanceof AnalysisApiError
+          ? err
+          : new AnalysisApiError(0, 'network', 'The request failed.')
       );
     } finally {
       setLoading(false);
@@ -81,10 +88,22 @@ export default function DemoPage() {
             )}
           </div>
 
-          {!results ? (
-            <UploadForm onAnalyze={handleAnalyze} loading={loading} />
-          ) : (
+          {loading ? (
+            <div className="space-y-8">
+              <AnalysisProgress elapsedMs={elapsedMs} />
+              <ResultsSkeleton />
+            </div>
+          ) : results ? (
             <Dashboard data={results} onNewAnalysis={() => setResults(null)} />
+          ) : (
+            <>
+              {error && (
+                <div className="mb-6">
+                  <AnalysisError error={error} onRetry={() => setError(null)} />
+                </div>
+              )}
+              <UploadForm onAnalyze={handleAnalyze} />
+            </>
           )}
         </div>
       </section>

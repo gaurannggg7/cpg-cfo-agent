@@ -1,0 +1,23 @@
+date,amount,description,category
+2025-08-07,-7957.10,Payroll Taxes,Marketing
+2025-02-13,-1914.65,HQ Office Rent,Rent
+2025-08-17,-1600.07,Cleaning Services,Software
+2025-08-24,-5601.75,"multi
+line
+description, with comma",Utilities
+2025-10-03,-7630.53,Email Campaign - Klaviyo,Payroll
+2025-05-31,-2679.35,Co-Packer Fees - CPG Manufacturing,Marketing
+2025-07-10,-2323.81,Freight - XPO Logistics,Utilities
+2025-08-13,-2264.49,Electricity - Warehouse,Utilities
+2025-03-20,-2568.12,Co-Packer Fees - CPG Manufacturing,Utilities
+2025-06-17,-630.00,Freight - XPO Logistics,Utilities
+2025-09-17,-4760.46,Email Campaign - Klaviyo,Payroll
+2025-08-26,-8919.05,Payroll Taxes,COGS
+2025-09-01,-7951.28,Electricity - Warehouse,Rent
+2025-07-11,-411.24,Freight - XPO Logistics,Utilities
+2025-03-03,-501.00,Co-Packer Fees - CPG Manufacturing,Utilities
+2025-02-08,-3381.52,Cleaning Services,Rent
+2025-05-14,-6986.23,Email Campaign - Klaviyo,COGS
+2025-02-24,-5755.24,Legal Retainer - Trademark Filing,Logistics
+2025-04-22,-385.22,AWS Hosting,Operations
+2025-01-23,-1875.59,Freight - XPO Logistics,COGS

@@ -1,0 +1,21 @@
+date,amount,description,category
+2025-02-07,-7400.40,Payroll Taxes,Logistics
+2025-10-26,-569.09,Office Supplies - Staples,Utilities
+2025-01-20,-819.23,HQ Office Rent,Payroll
+2025-05-04,-861.88,HQ Office Rent,COGS
+2025-10-17,-1158.03,Electricity - Warehouse,COGS,extra,cells,here
+2025-10-23,-5290.60,Raw Materials - Packaging Corp,Utilities
+2025-01-24,-5032.15,Cleaning Services,Marketing
+2025-08-03,-1341.08,Payroll Taxes,Marketing
+2025-10-14,-7354.33
+2025-10-25,-5162.28,Electricity - Warehouse,Logistics
+2025-02-19,-4952.31,Payroll Taxes,COGS
+2025-04-16,-4492.91,Office Supplies - Staples,Software
+2025-06-10,-4217.14,Ingredient Supplier - FlavorTech,Logistics
+2025-06-03,-2273.42,Cleaning Services,Utilities
+2025-02-11,-5191.09,Office Supplies - Staples,Rent
+2025-06-25,-6578.54,Freight - XPO Logistics,Payroll
+2025-03-02,-4631.80,Cleaning Services,Logistics
+2025-03-19,-8402.77,HQ Office Rent,COGS
+2025-02-09,-6892.91,Co-Packer Fees - CPG Manufacturing,Logistics
+2025-06-24,-6272.89,Co-Packer Fees - CPG Manufacturing,Rent

@@ -3,20 +3,28 @@
 import { useState } from 'react';
 
 interface Props {
-  onAnalyze: (file: File, revenue: number) => void;
-  loading: boolean;
+  onAnalyze: (file: File, revenue: number, cashOnHand?: number) => void;
 }
 
 const MAX_MONTHLY_REVENUE = 100_000_000;
+const MAX_CASH_ON_HAND = 1_000_000_000;
 
-export default function UploadForm({ onAnalyze, loading }: Props) {
+export default function UploadForm({ onAnalyze }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [revenue, setRevenue] = useState(100000);
+  // Empty string, not 0 — omitted means "not supplied," a real value the
+  // backend distinguishes from a $0 cash balance. Defaulting this to a
+  // number would silently turn "I didn't provide this" into a fabricated
+  // input, the same class of dishonesty the null+reason runway handling
+  // exists to avoid.
+  const [cashOnHand, setCashOnHand] = useState('');
   const [loadingSample, setLoadingSample] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (file) onAnalyze(file, revenue);
+    if (!file) return;
+    const cash = cashOnHand === '' ? undefined : Number(cashOnHand);
+    onAnalyze(file, revenue, cash);
   };
 
   const handleRevenueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,6 +33,15 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
     const digitsOnly = e.target.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
     const parsed = digitsOnly === '' ? 0 : Number(digitsOnly);
     setRevenue(Math.min(parsed, MAX_MONTHLY_REVENUE));
+  };
+
+  const handleCashOnHandChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digitsOnly = e.target.value.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+    if (digitsOnly === '') {
+      setCashOnHand('');
+      return;
+    }
+    setCashOnHand(String(Math.min(Number(digitsOnly), MAX_CASH_ON_HAND)));
   };
 
   const handleUseSampleData = async () => {
@@ -120,26 +137,37 @@ export default function UploadForm({ onAnalyze, loading }: Props) {
           </div>
         </div>
 
+        <div>
+          <label htmlFor="cash-on-hand" className="block text-sm font-semibold text-[var(--text)] mb-2">
+            Cash on Hand <span className="text-[var(--text-dim)] font-normal">(optional)</span>
+          </label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-dim)] text-sm font-medium select-none" aria-hidden="true">$</span>
+            <input
+              id="cash-on-hand"
+              type="text"
+              inputMode="numeric"
+              placeholder="Not provided"
+              value={cashOnHand === '' ? '' : Number(cashOnHand).toLocaleString('en-US')}
+              onChange={handleCashOnHandChange}
+              className="w-full pl-8 pr-4 py-3 bg-[var(--surface-2)] border border-[var(--border-strong)] rounded text-[var(--text)] text-sm placeholder:text-[var(--text-dim)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-flag)] focus:border-transparent transition-shadow duration-200"
+            />
+          </div>
+          <p className="text-xs text-[var(--text-dim)] mt-1.5">
+            Needed to compute runway. Without it, runway is left blank rather than guessed.
+          </p>
+        </div>
+
         <button
           type="submit"
-          disabled={!file || loading}
+          disabled={!file}
           className={`w-full py-3.5 px-6 rounded font-semibold text-sm tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface)] focus-visible:ring-[var(--accent-flag)] ${
-            loading || !file
+            !file
               ? 'bg-[var(--surface-2)] text-[var(--text-dim)] cursor-not-allowed'
               : 'bg-[var(--accent-flag)] hover:bg-[var(--accent-flag-hover)] text-[var(--bg)] cursor-pointer'
           }`}
         >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <svg className="motion-safe:animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              Analyzing…
-            </span>
-          ) : (
-            'Run CFO Analysis'
-          )}
+          Run CFO Analysis
         </button>
       </div>
     </form>

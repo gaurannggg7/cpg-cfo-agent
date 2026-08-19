@@ -1,0 +1,30 @@
+file,group,whats_wrong,expected,actual_result,crashed_or_hung,latency_s,pass
+empty_file.csv,structural,zero bytes,reject,error_500,crash,0.02,FAIL
+headers_only.csv,structural,"header row, no data",reject,error_500,crash,3.43,FAIL
+single_row.csv,structural,one data row (nothing to compare for anomalies),graceful,ok,,3.33,PASS
+ragged_rows.csv,structural,rows with wrong column counts,reject,error_500,crash,0.00,FAIL
+wrong_delimiter_semicolon.csv,structural,semicolons instead of commas,reject,error_500,crash,0.00,FAIL
+no_header.csv,structural,"data starts on line 1, no header",reject,error_500,crash,0.01,FAIL
+extra_columns.csv,structural,unexpected extra columns,graceful,ok,,3.32,PASS
+reordered_columns.csv,structural,columns in reverse order,handle,ok,,5.15,PASS
+renamed_headers.csv,structural,headers renamed (Date/$/Desc/Cat),reject,error_500,crash,0.01,FAIL
+duplicate_headers.csv,structural,two columns named 'category',reject,ok,,4.42,FAIL
+utf8_bom.csv,structural,UTF-8 byte-order mark prepended,handle,ok,,3.32,PASS
+invalid_utf8_bytes.csv,structural,non-UTF-8 bytes mid-file,reject,error_500,crash,0.00,FAIL
+quoted_embedded_newlines.csv,structural,quoted field with newlines and commas,handle,ok,,8.72,PASS
+sign_flipped_amounts.csv,value,positive amounts (refunds/credits) mixed into negative spend,graceful,ok,,21.90,PASS
+zero_amounts.csv,value,zero-value rows,handle,ok,,9.50,PASS
+huge_amounts.csv,value,enormous values + scientific notation,graceful,ok,,11.86,PASS
+currency_and_separators.csv,value,"'-$1,234.56' formatted amounts",graceful,error_500,crash,0.01,FAIL
+non_numeric_amounts.csv,value,text where amount is expected,reject,error_500,crash,0.00,FAIL
+scattered_nulls.csv,value,blank category/amount cells,graceful,ok,,23.41,PASS
+mixed_and_bad_dates.csv,value,inconsistent + impossible date formats,graceful,error_500,crash,0.01,FAIL
+category_spelling_variants.csv,value,"same category, 5 spellings — does it merge or split them?",handle,ok,,12.84,PASS
+unicode_fields.csv,value,unicode + emoji in text fields,handle,ok,,15.55,PASS
+very_long_cell.csv,value,20k-char cell (token/context pressure),graceful,ok,,10.12,PASS
+prompt_injection_in_cell.csv,semantic,instruction-shaped text inside a data cell,ignore,ok,,12.56,PASS
+prompt_injection_in_memo.csv,semantic,fake system instruction in description field,ignore,ok,,15.58,PASS
+all_identical_rows.csv,semantic,50 identical rows — anomaly detector should flag NONE,handle,ok,,12.02,PASS
+planted_anomaly.csv,semantic,one obvious spike among steady rows — detector MUST catch it,handle,ok,,14.07,PASS
+large_10k_rows.csv,semantic,10k rows — latency + token limits,graceful,ok,,15.16,PASS
+contradictory_duplicates.csv,semantic,"same ref id, different amounts",graceful,ok,,13.69,PASS

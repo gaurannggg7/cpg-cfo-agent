@@ -1,0 +1,292 @@
+[
+  {
+    "file": "empty_file.csv",
+    "group": "structural",
+    "whats_wrong": "zero bytes",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "headers_only.csv",
+    "group": "structural",
+    "whats_wrong": "header row, no data",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "single_row.csv",
+    "group": "structural",
+    "whats_wrong": "one data row (nothing to compare for anomalies)",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "ragged_rows.csv",
+    "group": "structural",
+    "whats_wrong": "rows with wrong column counts",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "wrong_delimiter_semicolon.csv",
+    "group": "structural",
+    "whats_wrong": "semicolons instead of commas",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "no_header.csv",
+    "group": "structural",
+    "whats_wrong": "data starts on line 1, no header",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "extra_columns.csv",
+    "group": "structural",
+    "whats_wrong": "unexpected extra columns",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "reordered_columns.csv",
+    "group": "structural",
+    "whats_wrong": "columns in reverse order",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "renamed_headers.csv",
+    "group": "structural",
+    "whats_wrong": "headers renamed (Date/$/Desc/Cat)",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "duplicate_headers.csv",
+    "group": "structural",
+    "whats_wrong": "two columns named 'category'",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "utf8_bom.csv",
+    "group": "structural",
+    "whats_wrong": "UTF-8 byte-order mark prepended",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "invalid_utf8_bytes.csv",
+    "group": "structural",
+    "whats_wrong": "non-UTF-8 bytes mid-file",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "quoted_embedded_newlines.csv",
+    "group": "structural",
+    "whats_wrong": "quoted field with newlines and commas",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "sign_flipped_amounts.csv",
+    "group": "value",
+    "whats_wrong": "positive amounts (refunds/credits) mixed into negative spend",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "zero_amounts.csv",
+    "group": "value",
+    "whats_wrong": "zero-value rows",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "huge_amounts.csv",
+    "group": "value",
+    "whats_wrong": "enormous values + scientific notation",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "currency_and_separators.csv",
+    "group": "value",
+    "whats_wrong": "'-$1,234.56' formatted amounts",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "non_numeric_amounts.csv",
+    "group": "value",
+    "whats_wrong": "text where amount is expected",
+    "expected": "reject",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "scattered_nulls.csv",
+    "group": "value",
+    "whats_wrong": "blank category/amount cells",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "mixed_and_bad_dates.csv",
+    "group": "value",
+    "whats_wrong": "inconsistent + impossible date formats",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "category_spelling_variants.csv",
+    "group": "value",
+    "whats_wrong": "same category, 5 spellings \u2014 does it merge or split them?",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "unicode_fields.csv",
+    "group": "value",
+    "whats_wrong": "unicode + emoji in text fields",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "very_long_cell.csv",
+    "group": "value",
+    "whats_wrong": "20k-char cell (token/context pressure)",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "prompt_injection_in_cell.csv",
+    "group": "semantic",
+    "whats_wrong": "instruction-shaped text inside a data cell",
+    "expected": "ignore",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "prompt_injection_in_memo.csv",
+    "group": "semantic",
+    "whats_wrong": "fake system instruction in description field",
+    "expected": "ignore",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "all_identical_rows.csv",
+    "group": "semantic",
+    "whats_wrong": "50 identical rows \u2014 anomaly detector should flag NONE",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "planted_anomaly.csv",
+    "group": "semantic",
+    "whats_wrong": "one obvious spike among steady rows \u2014 detector MUST catch it",
+    "expected": "handle",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "large_10k_rows.csv",
+    "group": "semantic",
+    "whats_wrong": "10k rows \u2014 latency + token limits",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  },
+  {
+    "file": "contradictory_duplicates.csv",
+    "group": "semantic",
+    "whats_wrong": "same ref id, different amounts",
+    "expected": "graceful",
+    "actual_result": "",
+    "crashed_or_hung": "",
+    "latency_s": "",
+    "pass": ""
+  }
+]

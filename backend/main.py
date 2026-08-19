@@ -64,7 +64,16 @@ def parse_transactions(raw: bytes) -> pd.DataFrame:
                 columns=header)
 
     try:
-        df = pd.read_csv(StringIO(text))
+        # keep_default_na=False disables pandas' built-in NA-string sniffing
+        # ("N/A", "NaN", "null", "NA", "n/a", ...), which otherwise converts
+        # those straight to NaN during parsing - before the amount-cleaning
+        # code below ever runs. That let bad values silently vanish as
+        # "missing" instead of being caught by the non_numeric_amount check,
+        # the same class of silent data loss as the duplicate-header bug.
+        # Blank cells still end up treated as missing: they parse to a
+        # literal "" instead of NaN, and the explicit
+        # .replace({"": None, ...}) below normalizes that back.
+        df = pd.read_csv(StringIO(text), keep_default_na=False, na_values=[])
     except pd.errors.EmptyDataError:
         _reject("no_columns", "No columns could be parsed from the file.")
     except pd.errors.ParserError as exc:
@@ -82,8 +91,11 @@ def parse_transactions(raw: bytes) -> pd.DataFrame:
         _reject("no_data_rows", "The file has headers but no data rows.")
 
     # Amounts: accept "-$1,234.56" style formatting; blank cells are treated as
-    # missing and dropped; genuine text ("N/A", "pending") is a hard reject
-    # rather than a silent zero.
+    # missing and dropped further down (with the count surfaced via
+    # df.attrs["rows_dropped"], not silently); genuine text ("N/A",
+    # "pending") is a hard reject rather than a silent zero - this only
+    # works because keep_default_na=False above stops pandas from converting
+    # "N/A" itself into a blank before we ever see it.
     amounts = df["amount"]
     if amounts.dtype == object:
         amounts = (amounts.astype(str)
@@ -102,8 +114,16 @@ def parse_transactions(raw: bytes) -> pd.DataFrame:
     parsed_dates = pd.to_datetime(df["date"], errors="coerce", format="mixed")
     df["date"] = parsed_dates
 
-    # Drop rows we could not use, then make sure something survived.
+    # A blank date/amount cell is a DELIBERATELY different case from the
+    # non_numeric_amount check above: there's no content to validate as
+    # wrong, so a blank doesn't warrant rejecting the whole file the way
+    # "N/A" or "pending" do. But silently vanishing the row is the same
+    # failure mode this fix exists to close - so it's dropped, not rejected,
+    # and the count travels with the dataframe (df.attrs) so /analyze can
+    # surface it rather than letting rows disappear with zero trace.
+    rows_before = len(df)
     df = df.dropna(subset=["date", "amount"])
+    df.attrs["rows_dropped"] = rows_before - len(df)
     if len(df) == 0:
         _reject("no_usable_rows",
                 "No rows had both a parseable date and a numeric amount.")
@@ -150,6 +170,7 @@ async def analyze(
 ):
     content = await file.read()
     df = parse_transactions(content)
+    rows_dropped = df.attrs.get("rows_dropped", 0)
 
     months = len(df.groupby(df["date"].dt.to_period("M"))) or 1
     total_spend = float(df["amount"].sum())
@@ -223,6 +244,11 @@ async def analyze(
             "total_spend": total_spend,
             "date_range": f"{df['date'].min().date()} to {df['date'].max().date()}",
             "avg_transaction": float(df["amount"].mean()),
+            # Rows with a blank date or amount are dropped rather than
+            # rejected (see parse_transactions) - this is how many, so the
+            # caller can tell "51 transactions" apart from "51 of 55, 4 were
+            # unusable" instead of the count silently coming up short.
+            "rows_dropped": rows_dropped,
         },
     }
 @app.get("/health")

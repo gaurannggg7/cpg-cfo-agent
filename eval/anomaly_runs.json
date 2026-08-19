@@ -1,0 +1,160 @@
+{
+  "ground_truth": {
+    "spike_row_index": 25,
+    "spike_amount": -85000.0,
+    "spike_date": "2025-04-06",
+    "spike_description": "Co-Packer Fees - CPG Manufacturing",
+    "spike_category": "COGS",
+    "normal_amount_range": [
+      -400.0,
+      -200.0
+    ],
+    "n_rows": 50,
+    "note": "Detector must flag exactly this row. Sidecar is never sent to the pipeline \u2014 scoring is against these values, not cell text."
+  },
+  "planted": [
+    {
+      "run": 1,
+      "outcome": "ok",
+      "latency_s": 4.41,
+      "anomalies": [
+        "Unusually large negative transaction on 2025-01-06",
+        "High standard deviation of $11,978.67, indicating potential inconsistent transaction amounts"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 2,
+      "outcome": "ok",
+      "latency_s": 4.47,
+      "anomalies": [
+        "Large negative amount in min value (-85000.000000)",
+        "High standard deviation (11978.672813) indicating potential inconsistent transactions"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 3,
+      "outcome": "ok",
+      "latency_s": 13.19,
+      "anomalies": [
+        "High standard deviation in transaction amount",
+        "Negative transaction amounts",
+        "Outlier transaction amount of -85000.000000"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 4,
+      "outcome": "ok",
+      "latency_s": 13.38,
+      "anomalies": [
+        "Large standard deviation in transaction amounts, indicating potentially suspicious activity",
+        "Negative mean transaction amount, suggesting possible refund or return issues",
+        "Minimum transaction amount is significantly large and negative, potentially indicating a single large refund or return"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 5,
+      "outcome": "ok",
+      "latency_s": 15.17,
+      "anomalies": [
+        "Large negative transaction amount (-85000.000000) on 2025-01-06",
+        "High standard deviation (11978.672813) indicating potentially unusual transactions"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 6,
+      "outcome": "ok",
+      "latency_s": 14.0,
+      "anomalies": [
+        "Large negative outlier in transaction amount (-85000.000000)",
+        "High standard deviation in transaction amount (11978.672813)"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 7,
+      "outcome": "ok",
+      "latency_s": 14.42,
+      "anomalies": [
+        "Unusual minimum transaction amount of -85000.00",
+        "High standard deviation of 11978.67 indicating potential outliers"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 8,
+      "outcome": "ok",
+      "latency_s": 14.11,
+      "anomalies": [
+        "Large negative outlier in transaction amount (-85000.000000)",
+        "High standard deviation in transaction amount (11978.672813)"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 9,
+      "outcome": "ok",
+      "latency_s": 13.58,
+      "anomalies": [
+        "Large negative transaction amount of -85000.000000",
+        "High standard deviation of 11978.672813 indicating potential inconsistent transaction amounts"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 10,
+      "outcome": "ok",
+      "latency_s": 13.24,
+      "anomalies": [
+        "Unusually high standard deviation in transaction amounts, indicating potentially fraudulent or outlier transactions",
+        "Negative transaction amounts, which may indicate returns, refunds, or other unusual activity"
+      ],
+      "risk_level": "medium"
+    }
+  ],
+  "control": [
+    {
+      "run": 1,
+      "outcome": "ok",
+      "latency_s": 12.16,
+      "anomalies": [
+        "Zero standard deviation in transaction amounts",
+        "All transactions have the same amount and date"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 2,
+      "outcome": "ok",
+      "latency_s": 11.68,
+      "anomalies": [
+        "Zero standard deviation in amount, Uniform transaction amounts, No variation in dates"
+      ],
+      "risk_level": "high"
+    },
+    {
+      "run": 3,
+      "outcome": "ok",
+      "latency_s": 11.19,
+      "anomalies": [
+        "Zero standard deviation in transaction amounts, indicating potential data integrity issue or identical transactions",
+        "All transactions have the same date and amount, suggesting possible data duplication or error"
+      ],
+      "risk_level": "medium"
+    },
+    {
+      "run": 4,
+      "outcome": "ok",
+      "latency_s": 10.6,
+      "anomalies": [
+        "Zero standard deviation in transaction amounts, indicating potential data quality issue or identical transactions",
+        "All transactions have the same date, suggesting possible data duplication or incorrect date formatting"
+      ],
+      "risk_level": "medium"
+    }
+  ]
+}

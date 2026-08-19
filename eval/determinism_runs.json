@@ -1,0 +1,2190 @@
+[
+  {
+    "i": 1,
+    "outcome": "quota",
+    "latency_s": 7.392,
+    "body": null
+  },
+  {
+    "i": 2,
+    "outcome": "ok",
+    "latency_s": 14.602,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive list of expenses across COGS and OpEx categories, totaling significant amounts. The Anomalies section highlights a transaction of -5000.00 on 2026-02-14, which is flagged for review due to its deviation from the mean. The Runway analysis indicates that revenue exceeds spend, resulting in a net positive cash flow of $76,283 per month.\n\nThe three key decisions based on this analysis are: \n1. Review the transaction of -5000.00 on 2026-02-14 for potential errors or anomalies to ensure accuracy in financial reporting.\n2. Allocate the net positive cash flow of $76,283 per month towards strategic initiatives, such as investing in marketing campaigns or expanding product lines.\n3. Since runway_months is null, runway could not be computed because revenue covers spend, and the basis for calculation is cash_on_hand / (monthly_spend - monthly_revenue), which is not applicable in this scenario due to the positive net cash flow.\n\nNext steps will involve monitoring the flagged transaction, optimizing the allocation of the net positive cash flow, and continuing to track expenses to ensure the company's financial health and identify areas for improvement. Regular review of the Spend Breakdown, Anomalies, and Runway data will be essential to inform future financial decisions and drive business growth.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 00:00:00 is significantly lower than the mean",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 00:00:00 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 3,
+    "outcome": "quota",
+    "latency_s": 9.811,
+    "body": null
+  },
+  {
+    "i": 4,
+    "outcome": "ok",
+    "latency_s": 24.662,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive overview of the company's expenses, categorized into COGS and OpEx. The data shows a total of 9 COGS transactions and 37 OpEx transactions, with amounts ranging from -91.22 to -5000.0. The Anomalies section highlights a transaction of -5000.000000 on 2026-02-14, which is significantly lower than the mean, and a high standard deviation of amount, indicating potential inconsistent transactions.\n\nThe Runway data shows that the runway could not be computed because the cash_on_hand value is null. However, the data does provide a monthly spend of 23717.22 and a monthly revenue of 100000.0, resulting in a net monthly burn of -76282.78. Despite the inability to calculate the runway, the recommendations suggest that the revenue covers the spend, with a net positive of 76,283 per month. Based on this analysis, I have identified three key decisions: \n1. Review the transaction of -5000.000000 on 2026-02-14 for potential errors or fraud, as highlighted in the Anomalies section.\n2. Investigate the high standard deviation of amount in the OpEx transactions to ensure consistency and accuracy in financial reporting.\n3. Develop a strategy to allocate the net positive monthly cash flow of 76,283, considering options such as investing in growth initiatives, reducing debt, or building an emergency fund.\n\nIn the next steps, I will work with the management team to address the anomalies and develop a plan to optimize the company's financial performance, ensuring sustainable growth and profitability. This will involve conducting a thorough review of the transactions, implementing measures to reduce inconsistencies, and allocating the net positive monthly cash flow effectively. By doing so, we can mitigate potential risks, capitalize on opportunities, and drive the company's long-term success.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.000000 on 2026-01-02 00:00:00 is significantly lower than the mean",
+          "Standard deviation of amount is high (1405.578792) indicating potential inconsistent transactions"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.000000 on 2026-01-02 00:00:00 for potential errors or fraud"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 5,
+    "outcome": "quota",
+    "latency_s": 8.243,
+    "body": null
+  },
+  {
+    "i": 6,
+    "outcome": "ok",
+    "latency_s": 30.165,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided spend breakdown, anomalies, and runway data. The spend breakdown reveals a total of 31 transactions across two categories: COGS (Cost of Goods Sold) and OpEx (Operating Expenses). The COGS category includes expenses such as raw materials, co-packer fees, and ingredient suppliers, totaling $15,839.40 in expenses. The OpEx category includes expenses such as payroll taxes, cleaning services, and social media ads, totaling $43,877.82 in expenses.\n\nThe anomalies report highlights a transaction of -$5,000.00 on February 14, 2026, which is significantly lower than the mean, and a high standard deviation indicating large variability in transaction amounts. The risk level is classified as medium, and the recommended action is to review the transaction for potential errors or anomalies. The runway analysis could not be computed due to the lack of cash_on_hand data, and the reason provided is that revenue covers spend, making the runway not burn-limited. The monthly spend is $23,717.22, and the monthly revenue is $100,000.00, resulting in a net positive of $76,283.00 per month.\n\nBased on this analysis, I recommend the following three key decisions: \n1. Review the transaction of -$5,000.00 on February 14, 2026, for potential errors or anomalies to ensure accuracy in financial reporting.\n2. Continue to monitor and manage OpEx expenses, which account for a significant portion of total expenses, to identify areas for cost optimization and reduction.\n3. Develop a comprehensive cash flow management plan to ensure the effective use of the net positive cash flow of $76,283.00 per month, considering investments, debt repayment, or other strategic initiatives. Next steps will involve implementing these decisions, tracking their impact, and continuously reviewing financial performance to inform future strategic decisions.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 is significantly lower than the mean",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 7,
+    "outcome": "ok",
+    "latency_s": 26.434,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive overview of the company's expenses, categorized into COGS and OpEx. The data highlights various transactions, including raw materials, co-packer fees, ingredient suppliers, payroll taxes, and marketing expenses. The Anomalies section flags a transaction of -5000.00 on 2026-02-14 as significantly lower than the mean and median, indicating potential errors or anomalies. The Runway analysis shows that the revenue covers the spend, resulting in a net positive of $76,283 per month.\n\nThe key decisions based on this analysis are: \n1. Review the transaction of -5000.00 on 2026-02-14 for potential errors or anomalies, as flagged by the Anomalies section, to ensure accuracy and prevent similar discrepancies in the future.\n2. Allocate the net positive $76,283 per month to strategic initiatives, such as expanding marketing efforts, investing in research and development, or exploring new business opportunities, to drive growth and increase revenue.\n3. Since the runway_months could not be computed due to the reason that \"revenue covers spend; runway is not burn-limited\", focus on maintaining a stable and efficient operational structure to support the company's growth, rather than solely relying on cash reserves.\n\nThe next steps will involve implementing these decisions, monitoring the company's financial performance, and continuously assessing the Spend Breakdown, Anomalies, and Runway to ensure the CPG brand remains on a stable and profitable trajectory. This will enable the company to capitalize on opportunities, mitigate potential risks, and achieve long-term success.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 is significantly lower than the mean and median",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 8,
+    "outcome": "ok",
+    "latency_s": 27.077,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive list of expenses categorized into COGS and OpEx, with various transactions throughout January, February, and March. The Anomalies section highlights a medium risk level, primarily due to a significant transaction of -5000.00 on 2026-02-14, which may require review for potential errors. The Runway analysis indicates that revenue exceeds spend, resulting in a net positive cash flow of $76,283 per month.\n\nThe three key decisions based on this analysis are: \n1. Review the transaction of -5000.00 on 2026-02-14 for potential errors or anomalies to ensure accuracy in financial reporting.\n2. Continue to monitor and manage OpEx, as it comprises a significant portion of the company's expenses, to optimize resource allocation and minimize unnecessary costs.\n3. Leverage the net positive cash flow of $76,283 per month to invest in strategic growth initiatives, such as expanding product lines, enhancing marketing efforts, or exploring new distribution channels.\n\nGiven the current financial situation, the next steps would involve implementing the above decisions, maintaining a close eye on expenses, and exploring opportunities to further increase revenue and drive business growth. Since the runway_months could not be computed due to the lack of cash_on_hand data and because revenue covers spend, the company's financial health appears stable, allowing for strategic investments and expansion plans.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 is significantly lower than the mean",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 9,
+    "outcome": "ok",
+    "latency_s": 25.864,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive list of expenses across COGS and OpEx categories, totaling significant amounts. The Anomalies section highlights a transaction of -5000.00 on 2026-02-14, which is flagged for review due to its deviation from the mean. The Runway analysis indicates that the brand's revenue exceeds its spend, resulting in a net positive cash flow of $76,283 per month.\n\nThe three key decisions based on this analysis are: \n1. Review the transaction of -5000.00 on 2026-02-14 for potential errors or anomalies to ensure accuracy in financial reporting.\n2. Allocate the net positive cash flow of $76,283 per month towards strategic initiatives, such as investing in marketing campaigns, expanding product lines, or enhancing operational efficiency.\n3. Since runway_months could not be computed due to the reason that \"revenue covers spend; runway is not burn-limited\", focus on maintaining a healthy cash flow by continuously monitoring expenses and optimizing revenue streams.\n\nNext steps will involve implementing these decisions, starting with a thorough review of the flagged transaction, followed by the allocation of the net positive cash flow towards strategic initiatives. Additionally, regular monitoring of the brand's financial performance will be essential to ensure continued revenue growth and expense management. By taking these steps, the brand can maintain its financial stability and drive long-term success.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 is significantly lower than the mean",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  },
+  {
+    "i": 10,
+    "outcome": "ok",
+    "latency_s": 26.837,
+    "body": {
+      "summary": "As the CFO of a CPG brand, I have analyzed the provided Spend Breakdown, Anomalies, and Runway data. The Spend Breakdown reveals a comprehensive list of expenses across COGS and OpEx categories, totaling significant amounts. The Anomalies section highlights a transaction of -5000.00 on 2026-02-14, which is not on 2026-01-02 as stated, and notes a high standard deviation in transaction amounts, indicating large variability. The Runway analysis shows that revenue exceeds spend, resulting in a net positive cash flow of $76,283 per month.\n\nThe three key decisions based on this analysis are: \n1. Review the transaction of -5000.00 on 2026-02-14 for potential errors or anomalies, as flagged in the Anomalies section, to ensure accuracy and identify any necessary corrections.\n2. Investigate the high standard deviation in transaction amounts to understand the causes of this variability and determine if any adjustments can be made to reduce it and improve financial predictability.\n3. Since revenue covers spend, focus on optimizing operational efficiency and exploring opportunities to further increase revenue, rather than solely concentrating on reducing expenses, to maximize the net positive cash flow of $76,283 per month.\n\nThe runway could not be computed because cash_on_hand is null, and the basis for calculating runway is cash_on_hand / (monthly_spend - monthly_revenue), which cannot be determined without this crucial piece of information. Next steps will involve addressing the flagged anomaly, analyzing transaction variability, and strategizing to enhance operational efficiency and revenue growth, while also obtaining the necessary data to assess the company's runway.",
+      "categories": {
+        "categories": {
+          "COGS": [
+            {
+              "date": "2026-01-02",
+              "amount": -3017.44,
+              "description": "Raw Materials - Packaging Corp"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -2373.53,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-01-11",
+              "amount": -1866.02,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -2687.28,
+              "description": "Ingredient Supplier - FlavorTech"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -1776.27,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-02-18",
+              "amount": -2898.52,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-04",
+              "amount": -959.18,
+              "description": "Raw Materials - Bulk Sugar Co"
+            },
+            {
+              "date": "2026-03-13",
+              "amount": -860.92,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -1253.73,
+              "description": "Co-Packer Fees - CPG Manufacturing"
+            }
+          ],
+          "OpEx": [
+            {
+              "date": "2026-01-02",
+              "amount": -3973.32,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -529.23,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-01-02",
+              "amount": -323.75,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-01-03",
+              "amount": -927.26,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-01-04",
+              "amount": -274.1,
+              "description": "Slack Workspace"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -1126.57,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-01-08",
+              "amount": -4678.41,
+              "description": "Payroll Taxes"
+            },
+            {
+              "date": "2026-01-10",
+              "amount": -172.13,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-01-13",
+              "amount": -1176.26,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-01-18",
+              "amount": -469.07,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-01-19",
+              "amount": -1760.68,
+              "description": "Warehouse Rent - Monthly"
+            },
+            {
+              "date": "2026-01-22",
+              "amount": -91.22,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-01-30",
+              "amount": -622.05,
+              "description": "Retail Endcap Placement"
+            },
+            {
+              "date": "2026-01-31",
+              "amount": -777.1,
+              "description": "Freight - XPO Logistics"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -4516.71,
+              "description": "Biweekly Payroll Run"
+            },
+            {
+              "date": "2026-02-03",
+              "amount": -1204.28,
+              "description": "Legal Retainer - Trademark Filing"
+            },
+            {
+              "date": "2026-02-06",
+              "amount": -351.98,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-02-08",
+              "amount": -1161.64,
+              "description": "Social Media Ads - Meta"
+            },
+            {
+              "date": "2026-02-09",
+              "amount": -1987.93,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-02-10",
+              "amount": -249.61,
+              "description": "Internet & Phone"
+            },
+            {
+              "date": "2026-02-12",
+              "amount": -281.96,
+              "description": "AWS Hosting"
+            },
+            {
+              "date": "2026-02-14",
+              "amount": -5000.0,
+              "description": "Emergency Influencer Campaign - Valentine's Push"
+            },
+            {
+              "date": "2026-02-15",
+              "amount": -385.99,
+              "description": "Shopify Subscription"
+            },
+            {
+              "date": "2026-02-16",
+              "amount": -239.21,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-02-17",
+              "amount": -1612.71,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-02-19",
+              "amount": -270.06,
+              "description": "Equipment Maintenance"
+            },
+            {
+              "date": "2026-02-22",
+              "amount": -482.29,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-02-24",
+              "amount": -731.91,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-01",
+              "amount": -217.58,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-05",
+              "amount": -188.11,
+              "description": "Office Supplies - Staples"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -216.67,
+              "description": "Cleaning Services"
+            },
+            {
+              "date": "2026-03-08",
+              "amount": -886.42,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -1157.73,
+              "description": "Fuel Surcharge"
+            },
+            {
+              "date": "2026-03-12",
+              "amount": -2167.17,
+              "description": "HQ Office Rent"
+            },
+            {
+              "date": "2026-03-15",
+              "amount": -4569.22,
+              "description": "Contractor Payment - Design"
+            },
+            {
+              "date": "2026-03-16",
+              "amount": -155.1,
+              "description": "QuickBooks Subscription"
+            },
+            {
+              "date": "2026-03-21",
+              "amount": -309.83,
+              "description": "Electricity - Warehouse"
+            },
+            {
+              "date": "2026-03-23",
+              "amount": -1445.25,
+              "description": "Consulting - Retail Strategy"
+            },
+            {
+              "date": "2026-03-25",
+              "amount": -494.01,
+              "description": "Trade Show Booth - Expo West"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -906.4,
+              "description": "Last-Mile Delivery - Regional Carrier"
+            },
+            {
+              "date": "2026-03-28",
+              "amount": -420.87,
+              "description": "Email Campaign - Klaviyo"
+            },
+            {
+              "date": "2026-03-29",
+              "amount": -4946.99,
+              "description": "Biweekly Payroll Run"
+            }
+          ]
+        },
+        "total_by_category": {
+          "COGS": -17692.89,
+          "LOGISTICS": -4608.68,
+          "MARKETING": -12983.44,
+          "OPERATIONS": -1858.49,
+          "PAYROLL": -22684.65,
+          "PROFESSIONAL SERVICES": -3118.6,
+          "RENT": -5915.78,
+          "SOFTWARE": -1405.95,
+          "UTILITIES": -883.19
+        }
+      },
+      "anomalies": {
+        "anomalies": [
+          "Transaction of -5000.00 on 2026-01-02 is significantly lower than the mean",
+          "Standard deviation is high, indicating large variability in transaction amounts"
+        ],
+        "risk_level": "medium",
+        "actions": [
+          "Review transaction of -5000.00 on 2026-01-02 for potential errors or anomalies"
+        ]
+      },
+      "runway": {
+        "runway_months": null,
+        "monthly_spend": 23717.22,
+        "monthly_revenue": 100000.0,
+        "net_monthly_burn": -76282.78,
+        "cash_on_hand": null,
+        "basis": "cash_on_hand / (monthly_spend - monthly_revenue)",
+        "reason": "revenue covers spend; runway is not burn-limited",
+        "recommendations": [
+          "Revenue ($100,000/mo) covers spend ($23,717/mo); net positive $76,283/mo."
+        ]
+      },
+      "metrics": {
+        "total_transactions": 51,
+        "total_spend": -71151.67,
+        "date_range": "2026-01-02 to 2026-03-29",
+        "avg_transaction": -1395.1307843137254
+      }
+    }
+  }
+]
