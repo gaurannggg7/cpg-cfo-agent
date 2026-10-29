@@ -1,6 +1,6 @@
 # Architecture
 
-Baseline (repo name `cpg-cfo-agent`) has three independent ingestion paths that all feed the same LangGraph pipeline, plus a frontend auth layer that gates two of the three access patterns (browser demo, browser dashboard) without touching the pipeline itself.
+Baseline (repo name `cpg-cfo-agent`) has three ingestion paths that call the same LangGraph graph (3 LLM calls plus one deterministic Python node). Only the HTTP path validates input and builds the complete state; see [Path differences](#path-differences). A frontend auth layer gates two of the three access patterns (browser demo, browser dashboard) without touching the pipeline itself.
 
 ## System diagram
 
@@ -28,19 +28,19 @@ flowchart TD
     end
 
     subgraph pipeline["LangGraph pipeline  ·  agent.py"]
-        P1[categorize_transactions] --> P2[detect_anomalies]
-        P2 --> P3[calculate_runway]
-        P3 --> P4[generate_cfo_summary]
+        P1[categorize_transactions\nLLM] --> P4[generate_cfo_summary\nLLM]
+        P2[detect_anomalies\nLLM] --> P4
+        P3[calculate_runway\nPython, no LLM] --> P4
     end
 
     subgraph groq["Groq"]
-        LLM[Llama 3.3 70B\njson_object mode]
+        LLM[openai/gpt-oss-120b\nreasoning model]
     end
 
     AUTH --> pipeline
     KC --> pipeline
     MCP --> pipeline
-    pipeline <-->|4x API calls| LLM
+    pipeline <-->|3x API calls| LLM
 
     subgraph identity["Identity — Firebase Auth"]
         GUEST[Anonymous]
@@ -59,7 +59,7 @@ flowchart TD
     subgraph observability["Observability"]
         METRICS[prometheus-client :9090\nmonitoring.py]
         PROM[Prometheus server :9090]
-        GRAFANA[Grafana :3001\n5 panels, 2 unwired]
+        GRAFANA[Grafana :3001\n5 panels; live population unverified]
     end
 
     KC -->|log_evaluation| FS
@@ -68,7 +68,7 @@ flowchart TD
 
     API --> METRICS
     KC --> METRICS
-    METRICS -->|scrape every 5s| PROM
+    METRICS -.->|scrape config targets the Render host, see Services and ports| PROM
     PROM --> GRAFANA
 ```
 
@@ -78,7 +78,7 @@ The full auth surface is: guest (anonymous Firebase user), Google OAuth, and ema
 
 ### Why the backend didn't verify anything until recently
 
-For most of this project's life, `POST /analyze` had no authentication check at all — no `Authorization` header inspection, no token verification, nothing. CORS restricted which browser origins could call it, but CORS is not an auth boundary; a direct `curl` to the Render URL worked identically to a request from the real frontend. This was a genuine gap, not a design choice, and closing it was a discrete piece of work layered on top of the existing three-provider auth system rather than a rewrite of it.
+For most of this project's life, `POST /analyze` had no authentication check at all — no `Authorization` header inspection, no token verification, nothing. CORS restricts which browser origins may call it, but CORS is not an auth boundary; a non-browser client is unaffected by it. Closing that gap was layered on top of the existing three-provider auth system rather than a rewrite of it.
 
 ### The guest-token decision
 
@@ -107,13 +107,13 @@ headers: { Authorization: `Bearer ${token}` }
 
 Verifying an ID token needs two things: the project id (to check the token's audience) and Google's *public* signing certificates (to check the signature). It does **not** need privileged write access to anything — which is why local development only needs `FIREBASE_PROJECT_ID` in `backend/.env`, no service-account key. `backend/auth.py` supplies an explicit no-op credential (`google.auth.credentials.AnonymousCredentials`, wrapped in a small `_VerifyOnlyCredential` class) for this path — the naive assumption that `verify_id_token()` needs zero credentials at all turned out to be wrong (constructing the Admin SDK's auth client resolves Application Default Credentials regardless), so this class exists specifically to satisfy that requirement without handing local development a real key.
 
-Production (Render) is different: a stateless host doesn't have a natural place to put a JSON file, and Render's env var UI does not handle multiline values reliably enough to trust with a private key. The chosen format is `FIREBASE_SERVICE_ACCOUNT_BASE64` — a service-account JSON, base64-encoded onto a single line:
+A hosted deployment is different: a stateless host has no natural place for a JSON file, so `auth.py` accepts the key as a single-line environment variable. The supported format is `FIREBASE_SERVICE_ACCOUNT_BASE64` — a service-account JSON, base64-encoded onto a single line:
 
 ```bash
 base64 -i service-account.json | tr -d '\n'
 ```
 
-`backend/auth.py` decodes it at startup and initializes the real Firebase Admin SDK with it. `.env.example` documents the resolution order: `FIREBASE_SERVICE_ACCOUNT_BASE64` (Render) → `GOOGLE_APPLICATION_CREDENTIALS` (a file path — this is what `evaluation.py` already used for its own separate Firestore writes) → `FIREBASE_PROJECT_ID` (local dev, no key needed).
+`backend/auth.py` decodes it at startup and initializes the real Firebase Admin SDK with it. `.env.example` documents the resolution order: `FIREBASE_SERVICE_ACCOUNT_BASE64` (hosted) → `GOOGLE_APPLICATION_CREDENTIALS` (a file path — this is what `evaluation.py` already used for its own separate Firestore writes) → `FIREBASE_PROJECT_ID` (local dev, no key needed).
 
 ### Per-user data isolation
 
@@ -128,7 +128,7 @@ where `isRealUser()` additionally requires `request.auth.token.firebase.sign_in_
 
 ### Why the redesign kept the auth logic and only touched the styling
 
-When the landing page and `/demo` were rethemed to a dark UI, `Navbar.tsx`'s `isGoogleUser` / `isGuest` checks and its `handleSignIn` / `handleSignOut` handlers were left completely untouched — only the Tailwind classes changed. `/dashboard` and `/analyze` stayed on the original light theme (out of scope for the rebrand), so `Navbar` briefly carried a `variant="light" | "dark"` prop before the whole app went dark and the prop was removed as dead code. The auth *logic* itself never had a reason to change across any of this — it's identical across every route because the same component and the same `useAuth()` hook back every page.
+Across the visual redesigns (the app has since settled on a light earth-tone theme), `Navbar.tsx`'s `isGoogleUser` / `isGuest` checks and its `handleSignIn` / `handleSignOut` handlers stayed the same; only styling changed. The auth logic is identical across every route because the same component and the same `useAuth()` hook back every page.
 
 ## Data flow
 
@@ -136,17 +136,17 @@ When the landing page and `/demo` were rethemed to a dark UI, `Navbar.tsx`'s `is
 
 1. The browser attaches a Firebase ID token (`Authorization: Bearer <token>`) and uploads a CSV to `POST /analyze`.
 2. `auth.py`'s `require_firebase_user` dependency verifies the token before any CSV parsing happens; a missing or invalid token short-circuits with a `401` and the pipeline never runs.
-3. `main.py` reads the CSV into pandas, computes `monthly_burn`, and builds `AgentState`.
-4. `cfo_app.invoke()` runs the four LangGraph nodes in sequence.
-5. FastAPI returns the result JSON in a single response.
+3. `main.py` runs `parse_transactions()` (UTF-8, empty/ragged/duplicate-header checks, required `date`/`amount` columns, numeric amounts, parseable dates; rows with a blank date or amount are dropped and counted in `metrics.rows_dropped`). Failures return a structured 422 before any LLM call. It then computes `monthly_burn` and `monthly_spend` and builds `AgentState` (including optional `cash_on_hand`).
+4. `cfo_app.invoke()` runs `categorize`, `detect_anomalies` and `runway_calc` as one parallel step, then `summarize`.
+5. FastAPI replaces `categories.total_by_category` with pandas-computed totals and returns the result JSON in a single response. Provider rate limits return 503 with `Retry-After`; other Groq errors 502; other failures 500.
 6. If the caller is a real (non-anonymous) user, `saveAnalysis()` writes the result to Firestore under their UID; guests skip this step.
-7. `monitoring.py` records `REQUEST_COUNT` and `REQUEST_LATENCY` for the `/analyze` endpoint label.
+7. `monitoring.py` records `REQUEST_COUNT` and `REQUEST_LATENCY` for the `/analyze` endpoint label; `agent.py` records per-node time and prompt/completion tokens (instrumented in code; not verified against a live dashboard).
 
 ### gRPC / Kafka path
 
 1. A gRPC client calls `AnalyzeTransactions` on the Go gateway (port 50051).
-2. The gateway runs two validators (`ValidateCSV`, `ValidateSessionID`), generates a UUID job ID, and publishes a JSON envelope to `transaction-ingestion`.
-3. `kafka_consumer.py` deserializes the message, reconstructs `AgentState` from `csv_data`, and calls `cfo_app.invoke()`.
+2. The gateway runs two validators (`ValidateCSV`, `ValidateSessionID`), which only check for non-empty values, generates a UUID job ID, and publishes a JSON envelope to `transaction-ingestion`.
+3. `kafka_consumer.py` deserializes the message, reconstructs `AgentState` from `csv_data` with plain `pd.read_csv` / `to_datetime` (no `parse_transactions()`), and calls `cfo_app.invoke()`. It sets `monthly_revenue` to a hardcoded 100000 and does not set `monthly_spend` or `cash_on_hand`.
 4. After the pipeline completes, `evaluation.py` writes a quality-scored record to Firestore `evaluations/`.
 5. The result JSON is published to `analysis-complete` keyed by `job_id`.
 6. `monitoring.py` records metrics under the `kafka` endpoint label.
@@ -157,14 +157,26 @@ This path has no Firebase ID-token concept at all — it's gRPC, not HTTP-from-a
 
 1. Claude Desktop spawns `services/mcp/server.py` as a stdio subprocess (FastMCP).
 2. Three tools are registered: `analyze_transactions`, `categorize_spend`, `get_runway_forecast`.
-3. Each tool call parses the CSV with `_load_csv()`, infers `monthly_revenue` from the data, then runs the relevant LangGraph nodes.
-4. Results are returned as structured dicts to Claude.
+3. Each tool call parses the CSV with `_load_csv()` (invalid dates/amounts are coerced and those rows silently dropped; no `parse_transactions()`), infers `monthly_revenue` from the data (revenue-like columns, then positive amounts, then burn), then runs the relevant LangGraph nodes. It does not set `monthly_spend` or `cash_on_hand`.
+4. Results are returned as structured dicts to Claude. The tool functions record no request count, latency or success-rate metrics, and `server.py` starts no metrics HTTP server. The shared nodes in `agent.py` still update the per-node time and token metrics in the MCP process, but nothing exposes them (read from source, not run).
 
-stdio means this server is only ever reachable by a process that spawns it directly on the same machine — it has never been exposed as a network-reachable service, so it has no auth story of its own and needs none.
+### Path differences
+
+| | HTTP | Kafka | MCP |
+|---|---|---|---|
+| Input validation | `parse_transactions()`, structured 422 | None beyond non-empty (gateway) | Coercion, silent row drop |
+| `monthly_spend` in state | Set | **Not set** | **Not set** |
+| `cash_on_hand` | Optional form field | Not passed | Not passed |
+| `monthly_revenue` | Required form field | Hardcoded 100000 | Inferred from data |
+| pandas `total_by_category` | Added | Not added | Not added |
+
+`calculate_runway` treats a missing `monthly_spend` as 0, so on the Kafka and MCP paths it always reports that revenue covers spend. Their `runway` output is not meaningful until the state is fixed. No test covers this: the MCP tests use a fake pipeline.
+
+The server is started with `MCP_SERVER.run()` and `services/mcp/README.md` documents stdio transport, so the intended use is a command-based server launched by a local client. The repo configures no network transport and no authentication for it; whether it has ever been exposed some other way is not recorded here.
 
 ## Design decisions
 
-**Why LangGraph.** Financial analysis here isn't one LLM call with a big prompt — it's four narrow stages (categorize, detect anomalies, forecast runway, summarize), each with its own checkable output shape. LangGraph makes the stages explicit nodes in a state graph, so any one of them can be inspected, tested, or swapped independently, and a failure is attributable to a specific stage instead of "the LLM did something wrong somewhere in a 2000-word prompt."
+**Why LangGraph.** The analysis is split into narrow stages (categorize, detect anomalies, compute runway, summarize), each with its own output shape. LangGraph makes them explicit nodes, so a stage can be inspected or swapped independently and failures are attributable. Only three stages call the model: runway moved to Python after the model was found to return arbitrary values for arithmetic it was handed (see `eval/RESULTS.md`).
 
 **Why Firestore over a relational database.** The data model here is genuinely simple: one `analyses` collection, documents scoped by `userId`, queried with `where('userId', '==', uid)` plus an `orderBy('createdAt')`. That doesn't need a schema migration story, connection pooling, or a hosted Postgres instance — it needs per-user document isolation, which Firestore Security Rules give directly without any backend code enforcing it.
 
@@ -174,13 +186,13 @@ stdio means this server is only ever reachable by a process that spawns it direc
 
 ## Frontend structure
 
-- `app/page.tsx` — public landing page (dark theme, animated background, no auth required to view).
+- `app/page.tsx` — public landing page (light earth-tone theme, no auth required to view).
 - `app/demo/page.tsx` — the interactive demo. Same `UploadForm` / `Dashboard` components as the authenticated `/analyze` flow, but results aren't saved for anonymous users.
 - `app/analyze/page.tsx` — authenticated upload flow; results are saved to Firestore and the user is offered a link into `/dashboard`.
 - `app/dashboard/page.tsx`, `app/dashboard/[id]/page.tsx` — analysis history list and detail view, both gated on `isSignedIn = !!user && !user.isAnonymous`.
 - `app/login/page.tsx`, `app/signup/page.tsx` — email/password forms plus a "Continue with Google" button, both redirecting to `/dashboard` on success and away from themselves if the visitor is already signed in with a real account.
 - `components/Navbar.tsx` — the one place `isGoogleUser` / `isGuest` branching lives; every page renders the same component.
-- `components/ScanlinesOverlay.tsx` — the persistent background: five independently animated radial light sources (different colors, sizes, opacities, and drift durations so they never visually sync), a vignette, and a CRT scanline texture, mounted once in `app/layout.tsx` so it spans every route instead of resetting per page or per section.
+- `components/AnalysisProgress.tsx`, `ResultsSkeleton.tsx`, `AnalysisError.tsx` — staged loading UI (paced from recorded per-node means, i.e. an estimate, not a server progress signal), a results placeholder, and structured error cards for the API's error codes.
 - `components/landing/` — the marketing sections (Hero, Problem, Pipeline, Capabilities, Architecture, Stack, FooterCTA), each a small, focused component rather than one long page file.
 
 ## Services and ports
@@ -192,37 +204,49 @@ stdio means this server is only ever reachable by a process that spawns it direc
 | Go gRPC gateway | 50051 | `FinancialAnalysisService.AnalyzeTransactions` |
 | Kafka broker | 9092 | Confluent 7.6.0; internal hostname `kafka` in Docker Compose |
 | Zookeeper | 2181 | Required by Confluent Kafka |
-| prometheus-client | 9090 (container-internal) | Started by `monitoring.py` inside the backend container; scraped by Prometheus as `backend:9090` |
-| Prometheus server | 9090 (host) | Prometheus UI; scrapes `backend:9090` every 5s |
+| prometheus-client | 9090 (container-internal) | Started by `monitoring.py` in the backend process. Note: the tracked Prometheus config does **not** target `backend:9090` |
+| Prometheus server | 9090 (host) | Prometheus UI. The config rendered from `prometheus/prometheus.yml.template` scrapes `cpg-cfo-agent.onrender.com` over HTTPS every 5 s and `remote_write`s to a Grafana Cloud URL from `.env`; operation not verified, and the custom metrics' presence on that endpoint is unconfirmed |
 | Grafana | 3001 | Dashboard auto-provisioned from `grafana/` |
 
 ## LangGraph pipeline nodes
 
-All four nodes live in `backend/agent.py` and share a single `AgentState` TypedDict. This file has been treated as a stability boundary throughout the auth and rebrand work — it was never touched, including for the two Prometheus metrics that would technically need instrumentation added inside it.
+All four nodes live in `backend/agent.py` and share a single `AgentState` TypedDict. Calls use `temperature=0.0`, `seed=42` (best-effort on Groq).
 
 ```
-categorize_transactions
-    Input:  csv_text (first 3000 chars)
-    Output: categorized → {categories: {COGS: [...], OpEx: [...]}, total_by_category: {...}}
-    Model:  llama-3.3-70b-versatile, json_object mode
+categorize_transactions   (LLM, json_object mode)
+    Input:  csv_text[:3000] — a character slice of the re-serialized CSV; rows
+            beyond the cut (and possibly a partial last row) are not seen.
+    Output: categorized → {categories: {COGS: [{date, amount, description}], OpEx: [...]}}
+            The model may return fewer items than it was given (observed on
+            gpt-oss-120b). main.py adds total_by_category from pandas.
 
-detect_anomalies
-    Input:  df_summary (pandas describe() output)
+detect_anomalies          (LLM, json_object mode)
+    Input:  df_summary = df.describe().to_string() — aggregate statistics only.
+            No transaction rows; the date column is not expected to be present
+            (based on pandas 2.x default behavior; not executed).
     Output: anomalies → {anomalies: [...], risk_level: "low|medium|high", actions: [...]}
-    Model:  llama-3.3-70b-versatile, json_object mode
+            Supports "an extreme value exists" claims, not row identification.
 
-calculate_runway
-    Input:  monthly_burn, monthly_revenue (pre-computed from CSV)
-    Output: runway → {runway_months: float, recommendations: [...]}
-    Model:  llama-3.3-70b-versatile, json_object mode
+calculate_runway          (Python, no LLM)
+    Input:  monthly_spend, monthly_revenue, cash_on_hand (optional)
+    Output: runway → {runway_months | null, monthly_spend, monthly_revenue,
+            net_monthly_burn, cash_on_hand, basis, reason, recommendations}
+            runway_months = cash_on_hand / (monthly_spend − monthly_revenue);
+            null if cash is missing or revenue covers spend.
 
-generate_cfo_summary
+generate_cfo_summary      (LLM, free text)
     Input:  categorized, anomalies, runway
-    Output: summary → str (3-paragraph executive brief)
-    Model:  llama-3.3-70b-versatile, free-text mode
+    Output: summary → str. The prompt asks for plain text with no markdown;
+            this is a prompt instruction, not validated output.
 ```
 
-Graph edges: `categorize → detect_anomalies → runway_calc → summarize → END`
+Model: `openai/gpt-oss-120b`, a reasoning model (replaced `llama-3.3-70b-versatile`, which Groq retired).
+
+**Graph edges.** Default: entry → `{categorize, detect_anomalies, runway_calc}` in parallel → `summarize` → END (`set_conditional_entry_point` fan-out). `BASELINE_SEQUENTIAL=1` restores `categorize → detect_anomalies → runway_calc → summarize`. The fan-out was verified concurrent on a synthetic graph; no end-to-end speed-up was demonstrated (inconclusive A/B, rate-limited), and fan-out concentrates tokens against the per-minute limit.
+
+**Instrumentation.** Each node records `cpg_cfo_agent_execution_seconds`; LLM nodes also record prompt and completion tokens (reasoning tokens are included in completion). The histogram's top finite bucket is 10 s. This is code-level; no live Grafana check was made.
+
+**Measurements.** Latency, determinism, anomaly recall/precision and corpus pass rates in `eval/RESULTS.md` were taken on `llama-3.3-70b-versatile`. On gpt-oss-120b only a smoke run, a markdown check, token cost (mean ~8,536/run, n=5) and the categorize completeness check were repeated (`eval/MIGRATION_NOTES.md`).
 
 ## Kafka envelope schema
 
@@ -238,7 +262,7 @@ JSON published to `transaction-ingestion` by the Go gateway:
 }
 ```
 
-JSON published to `analysis-complete` by `kafka_consumer.py`:
+`user_id` and `session_id` are not read by the consumer. JSON published to `analysis-complete` by `kafka_consumer.py` (no pandas `total_by_category`; `runway` is unreliable, see Path differences):
 
 ```json
 {
@@ -284,7 +308,7 @@ Gated entirely by the Security Rules described above — `userId` on write must 
 }
 ```
 
-Quality score (0–100): +40 if `summary` ≥ 100 chars; +20 each for non-empty `categorized`, `anomalies`, `runway`.
+Quality score (0–100), `backend/evaluation.py`: +40 if `summary` ≥ 100 chars; +20 each for non-empty `categorized`, `anomalies`, `runway`. It measures output completeness only, not financial accuracy, schema validity or model quality (a parse-failure fallback dict with `_parse_error` is non-empty and still scores). `agent_outputs` are stored as strings truncated to 2,000 characters; written only by the Kafka consumer.
 
 ## Deployment architecture
 
@@ -292,13 +316,13 @@ Quality score (0–100): +40 if `summary` ≥ 100 chars; +20 each for non-empty 
 |---|---|---|---|
 | Local dev | `npm run dev` (port 3000) | `uvicorn --reload` (port 8000) | `FIREBASE_PROJECT_ID` only — no service-account key needed to verify tokens |
 | Docker Compose | Same container as prod build | Same image as prod, plus Kafka/gateway/Prometheus/Grafana | Full stack, one command |
-| Production | Vercel | Render (free tier) | Two independent deploy targets, no shared infra |
+| Production | Vercel | Render (per README; no config tracked here) | Separate deploy targets; no shared infra described |
 
-**Render specifics worth knowing:** the free tier sleeps after ~15 minutes idle, so the first request after a gap has a 30–60 second cold-start cost — expected, not a bug. Render also defaults to a newer Python than this project's `pandas` version can build from source; a `PYTHON_VERSION` env var (or `.python-version` file) pinning 3.11 is required, not optional. Deploying the auth-verification change specifically required a two-step rollout: set `FIREBASE_SERVICE_ACCOUNT_BASE64` and let the *frontend* deploy first (sending tokens the old backend simply ignores), then deploy the backend that starts requiring them — reversing that order would have produced a window where the live demo 401s against a frontend that hadn't shipped the token-attachment code yet.
+**Hosting notes.** No Render or Vercel configuration is tracked in this repo, so the deployed settings, hosting tier, cold-start behavior and rollout history are not documented or verifiable here. The frontend shows a "waking up" notice after 10 s of waiting; it fires on elapsed time alone. For ordering, note that `/analyze` rejects requests without a valid Firebase token (`auth.py`), so a frontend that does not send tokens cannot call a backend that has this check.
 
 ## Kubernetes topology
 
-All workloads in namespace `cpg-cfo-agent`. **Structurally validated, never applied to a live cluster** — no context is even configured locally.
+All workloads in namespace `cpg-cfo-agent`. No validation output or deployment record is kept in this repo, so neither "validated" nor "never deployed" is established here. Known gaps in the manifests as written: images point at `ghcr.io/gaurannggg7/cpg-cfo-agent/*:latest` with no workflow that builds or pushes them; the backend Deployment passes only `KAFKA_BOOTSTRAP_SERVERS` and `GROQ_API_KEY`, while `FIREBASE_PROJECT_ID` is in the ConfigMap (still the `REPLACE_WITH_YOUR_PROJECT_ID` placeholder) but not referenced, and `auth.py` raises when no Firebase credential variable is set.
 
 | Deployment | Replicas | HPA |
 |-----------|----------|-----|
@@ -310,3 +334,7 @@ All workloads in namespace `cpg-cfo-agent`. **Structurally validated, never appl
 The HPA (`k8s/hpa.yaml`) targets the `gateway` deployment. Scale-up stabilization is 30s; scale-down is 300s. Requires the Kubernetes Metrics Server.
 
 The backend deployment exposes two container ports: `8000` (HTTP) and `9090` (metrics). The nginx Ingress routes external HTTP traffic. The gateway is exposed on port 50051 via its own Service.
+
+## Tests and CI
+
+No CI workflow is checked in (`.github/` absent), so there is no repository evidence of automated runs. Existing automated tests: Go gateway validators (`services/gateway/gateway_test.go`, empty-input checks only) and MCP server tests (`services/mcp/test_server.py`) that use a fake pipeline. Nothing tests `parse_transactions`, `agent.py`, `/analyze` or the frontend. The `eval/` scripts are live-API measurement harnesses, not regression tests. These tests were not run while this documentation was written.
